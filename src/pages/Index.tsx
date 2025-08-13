@@ -3,6 +3,7 @@ import AnimatedBackground from '@/components/AnimatedBackground';
 import Hero from '@/components/Hero';
 import FeatureSection from '@/components/FeatureSection';
 import AboutSection from '@/components/AboutSection';
+import { FloatingNavDemo } from '@/components/FloatingNavDemo';
 
 const Index = () => {
   useEffect(() => {
@@ -37,6 +38,9 @@ const Index = () => {
 
   return (
     <div className="relative">
+      {/* Floating Navigation - wait for intro animation on home page */}
+      <FloatingNavDemo waitForIntro={true} />
+      
       {/* Animated gradient background */}
       <AnimatedBackground />
       

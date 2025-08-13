@@ -17,7 +17,7 @@ export const GRADIENT_COLORS = {
   ],
   
   // Gradient stops for smooth transitions
-  STOPS: [25, 30, 40, 45, 55, 65, 75, 85, 100],
+  STOPS: [20, 25, 35, 45, 55, 65, 75, 85, 100],
   
   // Individual colors for reuse
   PURE_BLACK: "#000000",

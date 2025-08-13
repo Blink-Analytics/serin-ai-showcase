@@ -9,7 +9,7 @@ import {
 } from 'framer-motion';
 import React from 'react';
 
-type PresetType = 'blur' | 'shake' | 'scale' | 'fade' | 'slide';
+type PresetType = 'blur' | 'shake' | 'scale' | 'fade' | 'slide' | 'gradient';
 
 type TextEffectProps = {
   children: string;
@@ -98,6 +98,14 @@ const presetVariants: Record<
       exit: { opacity: 0, y: 20 },
     },
   },
+  gradient: {
+    container: defaultContainerVariants,
+    item: {
+      hidden: { opacity: 0, filter: 'blur(12px)' },
+      visible: { opacity: 1, filter: 'blur(0px)' },
+      exit: { opacity: 0, filter: 'blur(12px)' },
+    },
+  },
 };
 
 const AnimationComponent: React.FC<{
@@ -105,10 +113,31 @@ const AnimationComponent: React.FC<{
   variants: Variants;
   per: 'line' | 'word' | 'char';
   segmentWrapperClassName?: string;
-}> = React.memo(({ segment, variants, per, segmentWrapperClassName }) => {
+  isGradient?: boolean;
+}> = React.memo(({ segment, variants, per, segmentWrapperClassName, isGradient }) => {
+  const gradientStyle = isGradient ? {
+    background: 'linear-gradient(45deg, #8B5CF6, #3B82F6, #A855F7, #6366F1)',
+    backgroundSize: '300% 300%',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    backgroundClip: 'text',
+  } : {};
+
   const content =
     per === 'line' ? (
-      <motion.span variants={variants} className='block'>
+      <motion.span 
+        variants={variants} 
+        className='block'
+        style={gradientStyle}
+        animate={isGradient ? {
+          backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+        } : undefined}
+        transition={isGradient ? {
+          duration: 3,
+          repeat: Infinity,
+          ease: 'linear'
+        } : undefined}
+      >
         {segment}
       </motion.span>
     ) : per === 'word' ? (
@@ -116,6 +145,15 @@ const AnimationComponent: React.FC<{
         aria-hidden='true'
         variants={variants}
         className='inline-block whitespace-pre'
+        style={gradientStyle}
+        animate={isGradient ? {
+          backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+        } : undefined}
+        transition={isGradient ? {
+          duration: 3,
+          repeat: Infinity,
+          ease: 'linear'
+        } : undefined}
       >
         {segment}
       </motion.span>
@@ -127,6 +165,16 @@ const AnimationComponent: React.FC<{
             aria-hidden='true'
             variants={variants}
             className='inline-block whitespace-pre'
+            style={gradientStyle}
+            animate={isGradient ? {
+              backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+            } : undefined}
+            transition={isGradient ? {
+              duration: 3,
+              repeat: Infinity,
+              ease: 'linear',
+              delay: charIndex * 0.1
+            } : undefined}
           >
             {char}
           </motion.span>
@@ -178,6 +226,7 @@ export function TextEffect({
   const containerVariants = variants?.container || selectedVariants.container;
   const itemVariants = variants?.item || selectedVariants.item;
   const ariaLabel = per === 'line' ? undefined : children;
+  const isGradient = preset === 'gradient';
 
   const stagger = defaultStaggerTimes[per];
 
@@ -197,7 +246,7 @@ export function TextEffect({
   };
 
   return (
-    <AnimatePresence mode='popLayout'>
+    <AnimatePresence>
       {trigger && (
         <MotionTag
           initial='hidden'
@@ -215,6 +264,7 @@ export function TextEffect({
               variants={itemVariants}
               per={per}
               segmentWrapperClassName={segmentWrapperClassName}
+              isGradient={isGradient}
             />
           ))}
         </MotionTag>
