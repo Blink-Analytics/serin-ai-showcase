@@ -82,13 +82,13 @@ const Hero = () => {
                       opacity: 0, 
                       y: 60,
                       scale: 0.8,
-                      filter: 'blur(12px) brightness(0.3)' 
+                      filter: 'blur(4px)' 
                     },
                     visible: { 
                       opacity: 1, 
                       y: 0,
                       scale: 1,
-                      filter: 'blur(0px) brightness(1)',
+                      filter: 'blur(0px)',
                       transition: {
                         type: "spring",
                         damping: 15,
@@ -100,7 +100,7 @@ const Hero = () => {
                       opacity: 0, 
                       y: -40,
                       scale: 1.1,
-                      filter: 'blur(12px) brightness(0)',
+                      filter: 'blur(4px)',
                       transition: {
                         duration: 0.5,
                         ease: "easeInOut"
@@ -109,7 +109,7 @@ const Hero = () => {
                   },
                 }}
               >
-                Hello! I'm Serin.
+                {"Hello!\nI'm Serin."}
               </TextEffect>
               
               {/* Glow effect behind text */}
