@@ -9,34 +9,24 @@ const Hero = () => {
   const [isScrollingDown, setIsScrollingDown] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 500);
-
-    const audioTimer = setTimeout(() => {
-      setShowAudioControls(true);
-    }, 1500);
-
-    // Handle scroll detection for exit animation
+    setIsVisible(true);
+    
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      const threshold = window.innerHeight * 0.3;
-      
-      if (scrollY > threshold && !isScrollingDown) {
-        setIsScrollingDown(true);
-      } else if (scrollY <= threshold && isScrollingDown) {
-        setIsScrollingDown(false);
-      }
+      setIsScrollingDown(scrollY > 100);
     };
 
     window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-    return () => {
-      clearTimeout(timer);
-      clearTimeout(audioTimer);
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [isScrollingDown]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowAudioControls(true);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const scrollToNextSection = () => {
     const nextSection = document.getElementById('features');
@@ -46,74 +36,73 @@ const Hero = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center relative px-6">
-      <div className="text-center space-y-12 max-w-7xl w-full">
+    <div className="hero-container min-h-screen flex items-center justify-center relative">
+      <div className="hero-content text-center space-y-8 max-w-6xl mx-auto px-4">
         {isVisible && (
           <>
-            {/* Main hero text - center of attraction */}
             <div className="relative">
               <TextEffect
                 as="h1"
                 per="word"
                 delay={0.3}
                 trigger={!isScrollingDown}
-                className="hero-text mb-8"
+                className="hero-text mb-8 drop-shadow-2xl text-white text-6xl md:text-7xl lg:text-8xl font-bold"
+                preset="blur"
                 variants={{
                   container: {
                     hidden: { opacity: 0 },
                     visible: {
                       opacity: 1,
                       transition: {
-                        staggerChildren: 0.12,
-                        delayChildren: 0.2,
+                        staggerChildren: 0.15,
+                        delayChildren: 0.3,
                       },
                     },
                     exit: {
-                      opacity: 0,
+                      opacity: 1,
                       transition: { 
-                        staggerChildren: 0.08, 
+                        staggerChildren: 0.1, 
                         staggerDirection: -1,
-                        duration: 0.8
+                        duration: 0.6
                       },
                     },
                   },
                   item: {
                     hidden: { 
                       opacity: 0, 
-                      y: 60,
-                      scale: 0.8,
-                      filter: 'blur(4px)' 
+                      filter: 'blur(20px)',
+                      y: 30,
+                      scale: 0.8
                     },
                     visible: { 
                       opacity: 1, 
+                      filter: 'blur(0px)',
                       y: 0,
                       scale: 1,
-                      filter: 'blur(0px)',
                       transition: {
                         type: "spring",
-                        damping: 15,
-                        stiffness: 300,
+                        damping: 25,
+                        stiffness: 200,
                         duration: 0.8,
                       }
                     },
                     exit: { 
                       opacity: 0, 
-                      y: -40,
-                      scale: 1.1,
-                      filter: 'blur(4px)',
+                      filter: 'blur(15px)',
+                      y: -20,
+                      scale: 0.9,
                       transition: {
-                        duration: 0.5,
+                        duration: 0.4,
                         ease: "easeInOut"
                       }
                     },
                   },
                 }}
               >
-                {"Hello!\nI'm Serin."}
+                Hello! I'm Serin.
               </TextEffect>
-              
-              {/* Glow effect behind text */}
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent-violet/20 to-primary/20 blur-3xl scale-110 -z-10" />
+              {/* Glow effect behind text - reduced blur */}
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent-violet/20 to-primary/20 blur-sm scale-110 -z-10" />
             </div>
             
             <div className={`transition-all duration-700 ${isScrollingDown ? 'opacity-0 translate-y-8' : 'opacity-100 translate-y-0'}`}>
