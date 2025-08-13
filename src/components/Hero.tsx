@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { TextEffect } from '@/components/ui/text-effect';
 import AudioPlayer from './AudioPlayer';
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [showAudioControls, setShowAudioControls] = useState(false);
+  const [isScrollingDown, setIsScrollingDown] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -15,11 +17,26 @@ const Hero = () => {
       setShowAudioControls(true);
     }, 1500);
 
+    // Handle scroll detection for exit animation
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const threshold = window.innerHeight * 0.3;
+      
+      if (scrollY > threshold && !isScrollingDown) {
+        setIsScrollingDown(true);
+      } else if (scrollY <= threshold && isScrollingDown) {
+        setIsScrollingDown(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
     return () => {
       clearTimeout(timer);
       clearTimeout(audioTimer);
+      window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [isScrollingDown]);
 
   const scrollToNextSection = () => {
     const nextSection = document.getElementById('features');
@@ -33,9 +50,58 @@ const Hero = () => {
       <div className="text-center space-y-8 max-w-4xl">
         {isVisible && (
           <>
-            <h1 className="hero-text">
+            <TextEffect
+              as="h1"
+              per="word"
+              delay={0.2}
+              trigger={!isScrollingDown}
+              className="hero-text"
+              variants={{
+                container: {
+                  hidden: { opacity: 0 },
+                  visible: {
+                    opacity: 1,
+                    transition: {
+                      staggerChildren: 0.08,
+                    },
+                  },
+                  exit: {
+                    opacity: 0,
+                    transition: { 
+                      staggerChildren: 0.05, 
+                      staggerDirection: -1 
+                    },
+                  },
+                },
+                item: {
+                  hidden: { 
+                    opacity: 0, 
+                    y: 30,
+                    filter: 'blur(8px)' 
+                  },
+                  visible: { 
+                    opacity: 1, 
+                    y: 0,
+                    filter: 'blur(0px)',
+                    transition: {
+                      type: "spring",
+                      damping: 12,
+                      stiffness: 200,
+                    }
+                  },
+                  exit: { 
+                    opacity: 0, 
+                    y: -20,
+                    filter: 'blur(8px)',
+                    transition: {
+                      duration: 0.3,
+                    }
+                  },
+                },
+              }}
+            >
               Hello!, I'm Serin.
-            </h1>
+            </TextEffect>
             
             <p className="hero-subtitle max-w-2xl mx-auto">
               Your intelligent AI interview agent, designed to revolutionize 
