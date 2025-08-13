@@ -26,7 +26,8 @@ export default {
 				foreground: 'hsl(var(--foreground))',
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					foreground: 'hsl(var(--primary-foreground))',
+					glow: 'hsl(var(--primary-glow))'
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
@@ -42,7 +43,8 @@ export default {
 				},
 				accent: {
 					DEFAULT: 'hsl(var(--accent))',
-					foreground: 'hsl(var(--accent-foreground))'
+					foreground: 'hsl(var(--accent-foreground))',
+					violet: 'hsl(var(--accent-violet))'
 				},
 				popover: {
 					DEFAULT: 'hsl(var(--popover))',
@@ -51,6 +53,13 @@ export default {
 				card: {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
+				},
+				gradient: {
+					start: 'hsl(var(--gradient-start))',
+					mid1: 'hsl(var(--gradient-mid-1))',
+					mid2: 'hsl(var(--gradient-mid-2))',
+					mid3: 'hsl(var(--gradient-mid-3))',
+					end: 'hsl(var(--gradient-end))'
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
