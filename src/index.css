@@ -148,12 +148,33 @@
     z-index: -1;
   }
 
-  /* Hero text animations */
+  /* Hero text animations - Enhanced for center of attraction */
   .hero-text {
-    @apply text-6xl md:text-8xl font-bold bg-gradient-to-r from-primary via-accent-violet to-primary bg-clip-text text-transparent;
-    animation: fadeInUp var(--fade-duration) ease-out forwards;
-    opacity: 0;
-    transform: translateY(30px);
+    @apply text-7xl md:text-9xl lg:text-[12rem] font-black leading-none tracking-tight;
+    background: linear-gradient(135deg, 
+      hsl(var(--primary)) 0%, 
+      hsl(var(--accent-violet)) 30%, 
+      hsl(var(--primary-glow)) 60%, 
+      hsl(var(--accent)) 100%
+    );
+    background-size: 300% 300%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 40px hsl(var(--primary) / 0.5);
+    animation: gradientShift 4s ease-in-out infinite;
+    filter: drop-shadow(0 4px 20px hsl(var(--primary) / 0.3));
+    will-change: background-position, filter;
+  }
+
+  /* Dynamic gradient animation */
+  @keyframes gradientShift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
   }
 
   .hero-subtitle {

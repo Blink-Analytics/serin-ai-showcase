@@ -47,66 +47,81 @@ const Hero = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative px-6">
-      <div className="text-center space-y-8 max-w-4xl">
+      <div className="text-center space-y-12 max-w-7xl w-full">
         {isVisible && (
           <>
-            <TextEffect
-              as="h1"
-              per="word"
-              delay={0.2}
-              trigger={!isScrollingDown}
-              className="hero-text"
-              variants={{
-                container: {
-                  hidden: { opacity: 0 },
-                  visible: {
-                    opacity: 1,
-                    transition: {
-                      staggerChildren: 0.08,
+            {/* Main hero text - center of attraction */}
+            <div className="relative">
+              <TextEffect
+                as="h1"
+                per="word"
+                delay={0.3}
+                trigger={!isScrollingDown}
+                className="hero-text mb-8"
+                variants={{
+                  container: {
+                    hidden: { opacity: 0 },
+                    visible: {
+                      opacity: 1,
+                      transition: {
+                        staggerChildren: 0.12,
+                        delayChildren: 0.2,
+                      },
+                    },
+                    exit: {
+                      opacity: 0,
+                      transition: { 
+                        staggerChildren: 0.08, 
+                        staggerDirection: -1,
+                        duration: 0.8
+                      },
                     },
                   },
-                  exit: {
-                    opacity: 0,
-                    transition: { 
-                      staggerChildren: 0.05, 
-                      staggerDirection: -1 
+                  item: {
+                    hidden: { 
+                      opacity: 0, 
+                      y: 60,
+                      scale: 0.8,
+                      filter: 'blur(12px) brightness(0.3)' 
+                    },
+                    visible: { 
+                      opacity: 1, 
+                      y: 0,
+                      scale: 1,
+                      filter: 'blur(0px) brightness(1)',
+                      transition: {
+                        type: "spring",
+                        damping: 15,
+                        stiffness: 300,
+                        duration: 0.8,
+                      }
+                    },
+                    exit: { 
+                      opacity: 0, 
+                      y: -40,
+                      scale: 1.1,
+                      filter: 'blur(12px) brightness(0)',
+                      transition: {
+                        duration: 0.5,
+                        ease: "easeInOut"
+                      }
                     },
                   },
-                },
-                item: {
-                  hidden: { 
-                    opacity: 0, 
-                    y: 30,
-                    filter: 'blur(8px)' 
-                  },
-                  visible: { 
-                    opacity: 1, 
-                    y: 0,
-                    filter: 'blur(0px)',
-                    transition: {
-                      type: "spring",
-                      damping: 12,
-                      stiffness: 200,
-                    }
-                  },
-                  exit: { 
-                    opacity: 0, 
-                    y: -20,
-                    filter: 'blur(8px)',
-                    transition: {
-                      duration: 0.3,
-                    }
-                  },
-                },
-              }}
-            >
-              Hello!, I'm Serin.
-            </TextEffect>
+                }}
+              >
+                Hello! I'm Serin.
+              </TextEffect>
+              
+              {/* Glow effect behind text */}
+              <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-accent-violet/20 to-primary/20 blur-3xl scale-110 -z-10" />
+            </div>
             
-            <p className="hero-subtitle max-w-2xl mx-auto">
-              Your intelligent AI interview agent, designed to revolutionize 
-              recruitment with advanced conversational capabilities and deep insights.
-            </p>
+            <div className={`transition-all duration-700 ${isScrollingDown ? 'opacity-0 translate-y-8' : 'opacity-100 translate-y-0'}`}>
+              <p className="hero-subtitle max-w-3xl mx-auto leading-relaxed">
+                Your intelligent AI interview agent, designed to revolutionize 
+                recruitment with advanced conversational capabilities and deep insights.
+              </p>
+            </div>
 
             {showAudioControls && (
               <div className="space-y-6">
