@@ -82,7 +82,7 @@ const Hero = () => {
                       opacity: 0, 
                       y: 60,
                       scale: 0.8,
-                      filter: 'blur(4px)' 
+                      filter: 'blur(2px)' 
                     },
                     visible: { 
                       opacity: 1, 
@@ -100,7 +100,7 @@ const Hero = () => {
                       opacity: 0, 
                       y: -40,
                       scale: 1.1,
-                      filter: 'blur(4px)',
+                      filter: 'blur(8px)',
                       transition: {
                         duration: 0.5,
                         ease: "easeInOut"
