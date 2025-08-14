@@ -1,20 +1,31 @@
-import React, { useEffect, useRef, FC } from "react";
+import React, { useEffect, useRef, FC, useState } from "react";
 import { Renderer, Program, Mesh, Triangle, Vec3 } from "ogl";
 
-interface ComponentProps {
+interface EnhancedOrbProps {
   hue?: number;
   hoverIntensity?: number;
   rotateOnHover?: boolean;
   forceHoverState?: boolean;
+  isTextAnimating?: boolean;
+  audioIntensity?: number;
+  pulseActive?: boolean;
+  animationPhase?: 'loading' | 'textSync' | 'idle';
+  onLoadComplete?: () => void;
 }
 
-export const Component: FC<ComponentProps> = ({
-  hue = 0,
+export const EnhancedOrb: FC<EnhancedOrbProps> = ({
+  hue = 210, // Blue theme to match website
   hoverIntensity = 0.2,
   rotateOnHover = true,
   forceHoverState = false,
+  isTextAnimating = false,
+  audioIntensity = 0.5,
+  pulseActive = false,
+  animationPhase = 'idle',
+  onLoadComplete,
 }) => {
   const ctnDom = useRef<HTMLDivElement>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const vert = /* glsl */ `
     precision highp float;
@@ -36,6 +47,9 @@ export const Component: FC<ComponentProps> = ({
     uniform float hover;
     uniform float rot;
     uniform float hoverIntensity;
+    uniform float audioReaction;
+    uniform float loadProgress;
+    uniform float pulseIntensity;
     varying vec2 vUv;
 
     vec3 rgb2yiq(vec3 c) {
@@ -105,11 +119,12 @@ export const Component: FC<ComponentProps> = ({
       return vec4(colorIn.rgb / (a + 1e-5), a);
     }
     
-    const vec3 baseColor1 = vec3(0.611765, 0.262745, 0.996078);
-    const vec3 baseColor2 = vec3(0.298039, 0.760784, 0.913725);
-    const vec3 baseColor3 = vec3(0.062745, 0.078431, 0.600000);
-    const float innerRadius = 0.6;
-    const float noiseScale = 0.65;
+    // Enhanced base colors to match website theme
+    const vec3 baseColor1 = vec3(0.231373, 0.509804, 0.964706); // Electric blue (#3B82F6)
+    const vec3 baseColor2 = vec3(0.388235, 0.388235, 0.945098); // Indigo (#6366F1)
+    const vec3 baseColor3 = vec3(0.541176, 0.364706, 0.964706); // Purple (#8B5CF6)
+    const float innerRadius = 0.55;
+    const float noiseScale = 0.7;
     
     float light1(float intensity, float attenuation, float dist) {
       return intensity / (1.0 + dist * attenuation);
@@ -128,25 +143,44 @@ export const Component: FC<ComponentProps> = ({
       float len = length(uv);
       float invLen = len > 0.0 ? 1.0 / len : 0.0;
       
-      float n0 = snoise3(vec3(uv * noiseScale, iTime * 0.5)) * 0.5 + 0.5;
-      float r0 = mix(mix(innerRadius, 1.0, 0.4), mix(innerRadius, 1.0, 0.6), n0);
-      float d0 = distance(uv, (r0 * invLen) * uv);
-      float v0 = light1(1.0, 10.0, d0);
-      v0 *= smoothstep(r0 * 1.05, r0, len);
-      float cl = cos(ang + iTime * 2.0) * 0.5 + 0.5;
+      // Enhanced audio-reactive noise modulation
+      float audioMod = 1.0 + audioReaction * 0.4 * sin(iTime * 6.0);
+      float pulseMod = 1.0 + pulseIntensity * 0.3 * sin(iTime * 8.0);
+      float n0 = snoise3(vec3(uv * noiseScale * audioMod * pulseMod, iTime * 0.5)) * 0.5 + 0.5;
       
-      float a = iTime * -1.0;
+      // Enhanced radius with smooth pulsing
+      float basePulse = mix(innerRadius, 1.0, 0.5);
+      float audioPulse = audioReaction * 0.2 * sin(iTime * 10.0);
+      float wavePulse = pulseIntensity * 0.15 * sin(iTime * 12.0 + ang * 3.0);
+      float r0 = mix(mix(innerRadius, 1.0, 0.4), mix(innerRadius, 1.0, 0.7), n0) + audioPulse + wavePulse;
+      
+      float d0 = distance(uv, (r0 * invLen) * uv);
+      float v0 = light1(1.2, 8.0, d0);
+      v0 *= smoothstep(r0 * 1.1, r0, len);
+      
+      // Enhanced color cycling with audio reaction
+      float audioColorShift = audioReaction * 3.0 * sin(iTime * 5.0);
+      float pulseColorShift = pulseIntensity * 2.0 * sin(iTime * 7.0);
+      float cl = cos(ang + iTime * 1.5 + audioColorShift + pulseColorShift) * 0.5 + 0.5;
+      
+      // Dynamic rotating light source
+      float a = iTime * -0.8;
       vec2 pos = vec2(cos(a), sin(a)) * r0;
       float d = distance(uv, pos);
-      float v1 = light2(1.5, 5.0, d);
-      v1 *= light1(1.0, 50.0, d0);
+      float v1 = light2(1.8 + audioReaction * 1.2 + pulseIntensity * 0.8, 4.0, d);
+      v1 *= light1(1.2, 30.0, d0);
       
-      float v2 = smoothstep(1.0, mix(innerRadius, 1.0, n0 * 0.5), len);
-      float v3 = smoothstep(innerRadius, mix(innerRadius, 1.0, 0.5), len);
+      // Enhanced layering
+      float v2 = smoothstep(1.2, mix(innerRadius, 1.0, n0 * 0.6), len);
+      float v3 = smoothstep(innerRadius * 0.9, mix(innerRadius, 1.0, 0.6), len);
       
       vec3 col = mix(color1, color2, cl);
       col = mix(color3, col, v0);
       col = (col + v1) * v2 * v3;
+      
+      // Apply load progress with smooth fade-in
+      col *= smoothstep(0.0, 1.0, loadProgress);
+      
       col = clamp(col, 0.0, 1.0);
       
       return extractAlpha(col);
@@ -162,8 +196,10 @@ export const Component: FC<ComponentProps> = ({
       float c = cos(angle);
       uv = vec2(c * uv.x - s * uv.y, s * uv.x + c * uv.y);
       
-      uv.x += hover * hoverIntensity * 0.1 * sin(uv.y * 10.0 + iTime);
-      uv.y += hover * hoverIntensity * 0.1 * sin(uv.x * 10.0 + iTime);
+      // Enhanced distortion effects
+      float totalEffect = hover * hoverIntensity + audioReaction * 0.6 + pulseIntensity * 0.4;
+      uv.x += totalEffect * 0.08 * sin(uv.y * 12.0 + iTime * 2.0);
+      uv.y += totalEffect * 0.08 * sin(uv.x * 12.0 + iTime * 2.0);
       
       return draw(uv);
     }
@@ -182,9 +218,15 @@ export const Component: FC<ComponentProps> = ({
     let rendererInstance: Renderer | null = null;
     let glContext: WebGLRenderingContext | WebGL2RenderingContext | null = null;
     let rafId: number;
+    let loadStartTime = Date.now();
     
     try {
-        rendererInstance = new Renderer({ alpha: true, premultipliedAlpha: false, antialias: true, dpr: window.devicePixelRatio || 1 });
+        rendererInstance = new Renderer({ 
+          alpha: true, 
+          premultipliedAlpha: false, 
+          antialias: true, 
+          dpr: window.devicePixelRatio || 1 
+        });
         glContext = rendererInstance.gl;
         glContext.clearColor(0, 0, 0, 0);
         
@@ -210,6 +252,9 @@ export const Component: FC<ComponentProps> = ({
             hover: { value: 0 },
             rot: { value: 0 },
             hoverIntensity: { value: hoverIntensity },
+            audioReaction: { value: 0 },
+            loadProgress: { value: 0 },
+            pulseIntensity: { value: 0 },
         },
         });
 
@@ -217,30 +262,29 @@ export const Component: FC<ComponentProps> = ({
 
         const resize = () => {
             if (!container || !rendererInstance || !glContext) return;
-            const dpr = window.devicePixelRatio || 1; // Use actual DPR for sizing
+            const dpr = window.devicePixelRatio || 1;
             const width = container.clientWidth;
             const height = container.clientHeight;
 
-            // Check if dimensions are valid before resizing
             if (width === 0 || height === 0) return;
 
-            rendererInstance.setSize(width * dpr, height * dpr); // Set renderer size with DPR
+            rendererInstance.setSize(width * dpr, height * dpr);
             (glContext.canvas as HTMLCanvasElement).style.width = width + "px";
             (glContext.canvas as HTMLCanvasElement).style.height = height + "px";
             
             program.uniforms.iResolution.value.set(
-                glContext.canvas.width, // Use drawing buffer width/height
+                glContext.canvas.width,
                 glContext.canvas.height,
                 glContext.canvas.width / glContext.canvas.height
             );
         };
         window.addEventListener("resize", resize);
-        resize(); // Initial resize
+        resize();
 
         let targetHover = 0;
         let lastTime = 0;
         let currentRot = 0;
-        const rotationSpeed = 0.3;
+        const rotationSpeed = 0.2;
 
         const handleMouseMove = (e: MouseEvent) => {
           if (!container) return;
@@ -255,7 +299,7 @@ export const Component: FC<ComponentProps> = ({
           const uvX = ((x - centerX) / size) * 2.0;
           const uvY = ((y - centerY) / size) * 2.0;
 
-          if (Math.sqrt(uvX * uvX + uvY * uvY) < 0.8) {
+          if (Math.sqrt(uvX * uvX + uvY * uvY) < 0.9) {
             targetHover = 1;
           } else {
             targetHover = 0;
@@ -279,10 +323,37 @@ export const Component: FC<ComponentProps> = ({
           program.uniforms.hue.value = hue;
           program.uniforms.hoverIntensity.value = hoverIntensity;
 
-          const effectiveHover = forceHoverState ? 1 : targetHover;
-          program.uniforms.hover.value += (effectiveHover - program.uniforms.hover.value) * 0.1;
+          // Smooth load progress animation (3 seconds)
+          const loadProgress = Math.min((Date.now() - loadStartTime) / 3000, 1);
+          program.uniforms.loadProgress.value = loadProgress;
+          
+          if (loadProgress >= 1 && !isLoaded) {
+            setIsLoaded(true);
+            onLoadComplete?.();
+          }
 
-          if (rotateOnHover && effectiveHover > 0.5) {
+          const effectiveHover = forceHoverState ? 1 : targetHover;
+          program.uniforms.hover.value += (effectiveHover - program.uniforms.hover.value) * 0.08;
+
+          // Enhanced animation phase controls
+          let targetAudioReaction = 0;
+          let targetPulse = 0;
+
+          if (animationPhase === 'loading') {
+            targetAudioReaction = 0.1;
+            targetPulse = 0.2;
+          } else if (animationPhase === 'textSync') {
+            targetAudioReaction = isTextAnimating ? audioIntensity : 0.3;
+            targetPulse = pulseActive ? 0.6 : 0.4;
+          } else {
+            targetAudioReaction = 0;
+            targetPulse = 0.1;
+          }
+
+          program.uniforms.audioReaction.value += (targetAudioReaction - program.uniforms.audioReaction.value) * 0.12;
+          program.uniforms.pulseIntensity.value += (targetPulse - program.uniforms.pulseIntensity.value) * 0.1;
+
+          if (rotateOnHover && (effectiveHover > 0.3 || animationPhase === 'idle')) {
             currentRot += dt * rotationSpeed;
           }
           program.uniforms.rot.value = currentRot;
@@ -306,22 +377,19 @@ export const Component: FC<ComponentProps> = ({
           if (glContext) {
             glContext.getExtension("WEBGL_lose_context")?.loseContext();
           }
-          // OGL doesn't have explicit dispose methods for Program/Mesh/Geometry in same way as Three.js
-          // Losing context is the primary cleanup for WebGL resources managed by OGL
         };
 
     } catch (error) {
-        console.error("Error initializing OGL Orb:", error);
-        if (container && container.firstChild) { // Clean up canvas if error occurred after append
+        console.error("Error initializing Enhanced Orb:", error);
+        if (container && container.firstChild) {
             container.removeChild(container.firstChild);
         }
-        return () => { // Basic cleanup if init fails early
-             window.removeEventListener("resize", () => {}); // Placeholder if resize wasn't set up
+        return () => {
+             window.removeEventListener("resize", () => {});
         };
     }
 
-
-  }, [hue, hoverIntensity, rotateOnHover, forceHoverState, vert, frag]); // Added vert and frag as they are part of program
+  }, [hue, hoverIntensity, rotateOnHover, forceHoverState, isTextAnimating, audioIntensity, pulseActive, animationPhase]);
 
   return <div ref={ctnDom} className="w-full h-full" />;
 };

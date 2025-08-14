@@ -27,9 +27,12 @@ const AboutSection = () => {
   return (
     <section 
       ref={sectionRef}
-      className={`scroll-section py-20 px-6 ${isVisible ? 'visible' : ''}`}
+      className={`scroll-section py-20 px-6 relative overflow-hidden ${isVisible ? 'visible' : ''}`}
     >
-      <div className="container mx-auto max-w-4xl text-center space-y-8">
+      {/* Unified Gradient Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-background/90 to-primary/10"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.1),transparent_50%)]"></div>
+      <div className="container mx-auto max-w-4xl text-center space-y-8 relative z-10">
         <h2 className="text-4xl md:text-5xl font-bold mb-8 bg-gradient-to-r from-accent-violet via-primary to-accent bg-clip-text text-transparent">
           The Future of Recruitment
         </h2>
