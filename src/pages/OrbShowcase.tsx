@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import AnimatedGradientBackground from '@/components/ui/animated-gradient-background';
+import { GRADIENT_COLORS, ANIMATION_CONFIG } from '@/lib/gradient-constants';
 
 const OrbShowcase = () => {
   const [hue, setHue] = useState([270]);
@@ -14,9 +16,24 @@ const OrbShowcase = () => {
   const [forceHoverState, setForceHoverState] = useState(false);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-black to-slate-800 overflow-hidden">
-      {/* Floating Navigation */}
-      <FloatingNavDemo />
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Animated Gradient Background */}
+      <AnimatedGradientBackground 
+        Breathing={true}
+        startingGap={ANIMATION_CONFIG.BREATHING.startingGap}
+        breathingRange={8} // Reduced for orb demo
+        animationSpeed={0.008} // Slower for orb demo
+        topOffset={ANIMATION_CONFIG.BREATHING.topOffset}
+        gradientColors={GRADIENT_COLORS.BACKGROUND}
+        gradientStops={GRADIENT_COLORS.STOPS}
+      />
+
+      {/* Floating Navigation - Always Visible with Proper Spacing */}
+      <div className="fixed top-4 left-0 right-0 z-[9999] pointer-events-none">
+        <div className="pointer-events-auto">
+          <FloatingNavDemo waitForIntro={false} alwaysVisible={true} />
+        </div>
+      </div>
       
       {/* Main Orb Display */}
       <div className="relative w-full h-screen">
@@ -27,23 +44,23 @@ const OrbShowcase = () => {
           forceHoverState={forceHoverState}
         />
         
-        {/* Overlay Content */}
-        <div className="absolute inset-0 z-10 flex flex-col justify-between p-8">
-          {/* Header */}
+        {/* Overlay Content - Responsive with proper top margin */}
+        <div className="absolute inset-0 z-10 flex flex-col justify-between p-4 sm:p-6 lg:p-8 pt-28 sm:pt-32">
+          {/* Header - Responsive */}
           <div className="text-center">
-            <h1 className="text-6xl md:text-8xl font-bold text-white mb-4 drop-shadow-2xl">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-2 sm:mb-4 drop-shadow-2xl">
               Interactive Orb
             </h1>
-            <p className="text-xl text-gray-300 drop-shadow-lg">
+            <p className="text-lg sm:text-xl text-gray-300 drop-shadow-lg">
               Mouse-responsive WebGL animation powered by OGL
             </p>
           </div>
 
-          {/* Controls Panel */}
-          <Card className="bg-black/50 backdrop-blur-md border-gray-700 max-w-md mx-auto">
+          {/* Controls Panel - Responsive */}
+          <Card className="bg-black/40 backdrop-blur-md border-gray-700/50 max-w-sm sm:max-w-md mx-auto w-full">
             <CardHeader>
               <CardTitle className="text-white">Orb Controls</CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="text-gray-300">{/* Changed to lighter gray */}
                 Customize the orb's appearance and behavior
               </CardDescription>
             </CardHeader>

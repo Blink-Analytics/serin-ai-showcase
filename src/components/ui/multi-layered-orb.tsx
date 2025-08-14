@@ -4,11 +4,15 @@ import { Renderer, Program, Mesh, Triangle, Vec3 } from "ogl";
 interface MultiLayeredOrbProps {
   isTextAnimating?: boolean;
   audioIntensity?: number;
+  pulseActive?: boolean;
+  animationPhase?: 'loading' | 'textSync' | 'idle';
 }
 
 export const MultiLayeredOrb: FC<MultiLayeredOrbProps> = ({
   isTextAnimating = false,
   audioIntensity = 0.5,
+  pulseActive = false,
+  animationPhase = 'idle',
 }) => {
   const ctnDom = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -130,20 +134,15 @@ export const MultiLayeredOrb: FC<MultiLayeredOrbProps> = ({
       uv += offset;
       uv *= scale;
       
-      // Layer-specific color selection - theme-matching blues and purples
+      // Simplified layer-specific color selection for 2 layers
       vec3 color1, color2, color3;
-      if (layer < 0.33) {
-        // Layer 1: Deep blue core with theme blue
+      if (layer < 0.5) {
+        // Layer 1: Deep blue core
         color1 = getDeepBlue();
         color2 = getMidBlue(); 
         color3 = getElectricBlue();
-      } else if (layer < 0.66) {
-        // Layer 2: Electric blue with indigo
-        color1 = getMidBlue();
-        color2 = getElectricBlue();
-        color3 = getIndigo();
       } else {
-        // Layer 3: Indigo with purple accents
+        // Layer 2: Purple-violet outer layer
         color1 = getElectricBlue();
         color2 = getIndigo();
         color3 = getPurple();
@@ -153,53 +152,46 @@ export const MultiLayeredOrb: FC<MultiLayeredOrbProps> = ({
       float len = length(uv);
       float invLen = len > 0.0 ? 1.0 / len : 0.0;
       
-      // Layer-specific timing and audio modulation
-      float layerTime = iTime + layer * 2.0; // Offset timing per layer
-      float audioMod = 1.0 + audioReaction * (0.2 + layer * 0.1) * sin(layerTime * (8.0 + layer * 2.0));
-      float n0 = snoise3(vec3(uv * noiseScale * audioMod, layerTime * (0.4 + layer * 0.1))) * 0.5 + 0.5;
+      // Enhanced synchronization - both layers move perfectly together
+      float layerTime = iTime + layer * 0.1; // Minimal offset for subtle depth
+      float audioMod = 1.0 + audioReaction * 0.2 * sin(layerTime * 5.0);
+      float n0 = snoise3(vec3(uv * noiseScale * audioMod, layerTime * 0.25)) * 0.5 + 0.5;
       
-      // Dynamic radius with layer variations
-      float baseRadius = innerRadius + layer * 0.2;
-      float audioPulse = audioReaction * (0.1 + layer * 0.05) * sin(layerTime * (10.0 + layer * 3.0));
-      float r0 = mix(mix(baseRadius, 1.0, 0.3 + layer * 0.1), mix(baseRadius, 1.0, 0.7 - layer * 0.1), n0) + audioPulse;
+      // Synchronized radius calculation - both layers pulse together
+      float baseRadius = innerRadius + layer * 0.08; // Closer layers
+      float audioPulse = audioReaction * 0.06 * sin(layerTime * 6.0); // Gentler pulse
+      float r0 = mix(baseRadius, 1.0, 0.35) + audioPulse;
       
-      // Softer, more circular edges with improved falloff
+      // Reduced lighting intensity for softer appearance
       float d0 = distance(uv, (r0 * invLen) * uv);
-      float v0 = light1(1.4 - layer * 0.15, 12.0 + layer * 3.0, d0);
+      float v0 = light1(1.2, 10.0, d0); // Reduced intensity
       
       // Improved circular falloff to eliminate rectangular edges
       float circularFalloff = smoothstep(r0 * 1.1, r0 * 0.7, len);
       v0 *= circularFalloff;
       
-      // Layer-specific color cycling with violet highlights
-      float colorCycle = layerTime * (1.2 + layer * 0.3) + audioReaction * 2.0 * sin(layerTime * (4.0 + layer));
+      // Simplified color cycling for smoother motion
+      float colorCycle = layerTime + audioReaction * sin(layerTime * 5.0);
       float cl = cos(ang + colorCycle) * 0.5 + 0.5;
       
-      // Violet highlight instead of red - only on peaks
-      float violetHighlight = smoothstep(0.8, 1.0, v0) * smoothstep(0.9, 1.0, cl) * 0.2;
-      vec3 violetAccentColor = getVioletAccent();
-      
-      // Rotating elements with layer variations
-      float rotation = layerTime * rotationSpeed * (1.0 + layer * 0.3);
-      vec2 pos = vec2(cos(rotation), sin(rotation)) * r0 * (0.8 + layer * 0.2);
+      // Synchronized rotating elements with reduced intensity
+      float rotation = layerTime * rotationSpeed * 0.8; // Slower, more synchronized
+      vec2 pos = vec2(cos(rotation), sin(rotation)) * r0 * 0.9;
       float d = distance(uv, pos);
-      float v1 = light2(1.8 + audioReaction * (0.5 + layer * 0.3), 4.0 + layer, d);
-      v1 *= light1(1.0, 40.0 + layer * 10.0, d0);
+      float v1 = light2(1.4 + audioReaction * 0.3, 3.5, d); // Reduced intensity
+      v1 *= light1(0.8, 35.0, d0); // Softer secondary light
       
-      // Improved color blending with tighter cohesion
-      float v2 = smoothstep(1.0 - layer * 0.05, mix(baseRadius, 1.0, n0 * (0.5 + layer * 0.1)), len);
-      float v3 = smoothstep(baseRadius * (0.95 + layer * 0.02), mix(baseRadius, 1.0, 0.5 + layer * 0.05), len);
+      // Smoother edge blending to prevent rectangles
+      float v2 = smoothstep(0.98, mix(baseRadius, 1.0, n0 * 0.5), len);
+      float v3 = smoothstep(baseRadius * 0.92, mix(baseRadius, 1.0, 0.55), len);
       
       vec3 col = mix(color1, color2, cl);
-      col = mix(color3, col, v0 * (0.8 + layer * 0.1));
+      col = mix(color3, col, v0 * 0.8); // Slightly reduced mixing
       
-      // Add violet highlights instead of red
-      col = mix(col, violetAccentColor, violetHighlight);
+      col = (col + v1 * 0.6) * v2 * v3; // Reduced final lighting intensity
       
-      col = (col + v1 * (0.9 + layer * 0.05)) * v2 * v3;
-      
-      // Layer-specific intensity and load progress
-      col *= loadProgress * (0.6 + layer * 0.3);
+      // Simplified load progress
+      col *= loadProgress;
       
       col = clamp(col, 0.0, 1.0);
       
@@ -211,11 +203,10 @@ export const MultiLayeredOrb: FC<MultiLayeredOrbProps> = ({
       float size = min(iResolution.x, iResolution.y);
       vec2 uv = (fragCoord - center) / size * 2.0;
       
-      // Layer-specific distortions
-      float totalEffect = hover * hoverIntensity + audioReaction * (0.6 + layer * 0.2);
-      float distortionFreq = 8.0 + layer * 4.0;
-      uv.x += totalEffect * 0.08 * sin(uv.y * distortionFreq + iTime * (2.0 + layer));
-      uv.y += totalEffect * 0.08 * sin(uv.x * distortionFreq + iTime * (2.5 + layer * 0.5));
+      // Simplified distortions for smoother motion
+      float totalEffect = hover * hoverIntensity + audioReaction * 0.8;
+      uv.x += totalEffect * 0.05 * sin(uv.y * 8.0 + iTime * 2.0);
+      uv.y += totalEffect * 0.05 * sin(uv.x * 8.0 + iTime * 2.5);
       
       return draw(uv);
     }
@@ -229,10 +220,8 @@ export const MultiLayeredOrb: FC<MultiLayeredOrbProps> = ({
 
   // Tightly knit orb layer configurations
   const orbLayers = [
-    { layer: 0.0, offset: [0.0, 0.0], scale: 1.0, rotationSpeed: -0.3, opacity: 0.95 },
-    { layer: 0.33, offset: [0.01, -0.01], scale: 0.98, rotationSpeed: 0.2, opacity: 0.85 },
-    { layer: 0.66, offset: [-0.01, 0.01], scale: 0.96, rotationSpeed: -0.4, opacity: 0.75 },
-    { layer: 1.0, offset: [0.005, 0.005], scale: 0.94, rotationSpeed: 0.5, opacity: 0.65 }
+    { layer: 0.0, offset: [0.0, 0.0], scale: 1.0, rotationSpeed: -0.2, opacity: 0.9 },
+    { layer: 0.5, offset: [0.005, -0.005], scale: 0.95, rotationSpeed: 0.3, opacity: 0.7 }
   ];
 
   useEffect(() => {
@@ -358,14 +347,45 @@ export const MultiLayeredOrb: FC<MultiLayeredOrbProps> = ({
             setIsLoaded(true);
           }
 
-          program.uniforms.hover.value += (targetHover - program.uniforms.hover.value) * 0.1;
+          // Enhanced hover smoothing with natural easing
+          const hoverEasing = 1 - Math.pow(1 - 0.08, dt * 60); // Frame rate independent
+          program.uniforms.hover.value += (targetHover - program.uniforms.hover.value) * hoverEasing;
 
-          // Audio reaction effect
-          if (isTextAnimating) {
-            program.uniforms.audioReaction.value += (audioIntensity - program.uniforms.audioReaction.value) * 0.15;
-          } else {
-            program.uniforms.audioReaction.value += (0 - program.uniforms.audioReaction.value) * 0.1;
+          // Enhanced phase-based audio reaction animation with ultra-smooth transitions
+          const audioScale = window.innerWidth < 768 ? 0.5 : 1.0; // Mobile scaling
+          
+          let targetIntensity = 0;
+          let smoothingFactor = 0.08;
+          
+          switch (animationPhase) {
+            case 'loading':
+              // Gentle, slow breathing during loading with extended smoothing
+              const loadingBreath = Math.sin(t * 0.0012) * 0.06; // Slower, gentler
+              targetIntensity = 0.10 + loadingBreath;
+              smoothingFactor = 0.015; // Ultra-slow for maximum smoothness
+              break;
+            case 'textSync':
+              // Enhanced synchronized wave animation with natural breathing
+              const waveBase = pulseActive ? 0.22 : 0.0;
+              const primaryWave = Math.sin(t * 0.002) * 0.12; // Slower, more natural wave
+              const secondaryBreath = Math.sin(t * 0.0008) * 0.03; // Subtle breathing overlay
+              const naturalWavePattern = waveBase + primaryWave + secondaryBreath;
+              targetIntensity = (audioIntensity * audioScale * 0.35) + naturalWavePattern;
+              smoothingFactor = 0.04; // Smoother transitions for text sync
+              break;
+            case 'idle':
+            default:
+              // Extended ambient breathing with natural rhythm
+              const ambientBreath = Math.sin(t * 0.0006) * 0.02; // Slower breathing
+              const subtleVariation = Math.sin(t * 0.0003) * 0.01; // Ultra-subtle variation
+              targetIntensity = 0.035 + ambientBreath + subtleVariation;
+              smoothingFactor = 0.02; // Extended transition to idle
+              break;
           }
+          
+          // Enhanced smoothing with exponential easing for more natural motion
+          const easingFactor = 1 - Math.pow(1 - smoothingFactor, dt * 60); // Frame rate independent
+          program.uniforms.audioReaction.value += (targetIntensity - program.uniforms.audioReaction.value) * easingFactor;
 
           if (rendererInstance) {
             rendererInstance.render({ scene: mesh });
@@ -405,7 +425,7 @@ export const MultiLayeredOrb: FC<MultiLayeredOrbProps> = ({
     return () => {
       cleanupFunctions.forEach(cleanup => cleanup());
     };
-  }, [isTextAnimating, audioIntensity]);
+  }, [isTextAnimating, audioIntensity, pulseActive, animationPhase]);
 
   return <div ref={ctnDom} className="w-full h-full" />;
 };

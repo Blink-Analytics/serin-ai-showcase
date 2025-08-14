@@ -13,6 +13,7 @@ export const FloatingNav = ({
   navItems,
   className,
   waitForIntro = false,
+  alwaysVisible = false,
 }: {
   navItems: {
     name: string;
@@ -21,12 +22,13 @@ export const FloatingNav = ({
   }[];
   className?: string;
   waitForIntro?: boolean;
+  alwaysVisible?: boolean;
 }) => {
   const { scrollYProgress } = useScroll();
   const location = useLocation();
 
-  const [visible, setVisible] = useState(!waitForIntro);
-  const [introComplete, setIntroComplete] = useState(!waitForIntro);
+  const [visible, setVisible] = useState(!waitForIntro || alwaysVisible);
+  const [introComplete, setIntroComplete] = useState(!waitForIntro || alwaysVisible);
 
   // Show navbar after intro text animation completes (2.5 seconds) - only if waitForIntro is true
   useEffect(() => {
@@ -43,6 +45,12 @@ export const FloatingNav = ({
   useMotionValueEvent(scrollYProgress, "change", (current) => {
     // Check if current is not undefined and is a number
     if (typeof current === "number") {
+      // If alwaysVisible is true, keep navbar visible
+      if (alwaysVisible) {
+        setVisible(true);
+        return;
+      }
+      
       // Only apply scroll-based visibility logic after intro is complete (or immediately if not waiting)
       if (waitForIntro && !introComplete) return;
 
