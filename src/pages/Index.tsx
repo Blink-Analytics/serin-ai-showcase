@@ -56,11 +56,8 @@ const Index = () => {
         <AboutSection />
         
         {/* Contact/CTA Section */}
-        <section className="scroll-section py-20 px-6 border-t border-border/20 relative overflow-hidden">
-          {/* Unified Gradient Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-background via-background/98 to-primary/5"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(var(--primary)/0.05),transparent_70%)]"></div>
-          <div className="container mx-auto max-w-4xl text-center space-y-8 relative z-10">
+        <section className="scroll-section py-20 px-6 border-t border-border/20">
+          <div className="container mx-auto max-w-4xl text-center space-y-8">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Ready to Transform Your Hiring?
             </h2>
@@ -89,10 +86,8 @@ const Index = () => {
       </main>
 
       {/* Footer */}
-      <footer className="relative py-8 px-6 border-t border-border/20 overflow-hidden">
-        {/* Unified Gradient Background */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background to-background/95"></div>
-        <div className="container mx-auto max-w-6xl relative z-10">
+      <footer className="relative z-10 py-8 px-6 border-t border-border/20">
+        <div className="container mx-auto max-w-6xl">
           <div className="text-center text-muted-foreground">
             <p>&copy; 2024 Serin AI. Revolutionizing recruitment with intelligent conversations.</p>
           </div>

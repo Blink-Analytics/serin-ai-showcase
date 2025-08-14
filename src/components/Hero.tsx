@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useScroll, useMotionValueEvent } from 'framer-motion';
 import { TextEffect } from '@/components/ui/text-effect';
 import AnimatedGradientBackground from '@/components/ui/animated-gradient-background';
-import { EnhancedOrb } from '@/components/ui/enhanced-orb';
+import { MultiLayeredOrb } from '@/components/ui/multi-layered-orb';
 import { GRADIENT_COLORS, ANIMATION_CONFIG } from '@/lib/gradient-constants';
 
 const Hero = () => {
@@ -10,9 +10,8 @@ const Hero = () => {
   const [hasAnimated, setHasAnimated] = useState(false);
   const [isOrbLoaded, setIsOrbLoaded] = useState(false);
   const [isTextAnimating, setIsTextAnimating] = useState(false);
-  const [orbScale, setOrbScale] = useState(3.5); // Start much larger for dramatic entrance
+  const [orbScale, setOrbScale] = useState(2.8); // Start larger for more dramatic effect
   const [orbAnimationPhase, setOrbAnimationPhase] = useState<'loading' | 'textSync' | 'idle'>('loading');
-  const [orbOpacity, setOrbOpacity] = useState(0.3);
   const [exitAnimation, setExitAnimation] = useState(false);
   const { scrollY } = useScroll();
 
@@ -21,48 +20,43 @@ const Hero = () => {
     if (hasAnimated) return; // Prevent multiple animations
     
     const sequence = async () => {
-      // Phase 1: Orb dramatic entrance with smooth scale-down (4000ms total)
+      // Phase 1: Orb loads with gradual, breathing entry (2000ms total)
       setIsOrbLoaded(true);
       setOrbAnimationPhase('loading');
-      setOrbOpacity(1);
+      await new Promise(resolve => setTimeout(resolve, 600)); // Let orb fully initialize and breathe
       
-      // Very smooth multi-step scale reduction with natural easing
-      await new Promise(resolve => setTimeout(resolve, 800)); // Initial breathing period
-      
-      setOrbScale(2.8); // First gentle reduction
-      await new Promise(resolve => setTimeout(resolve, 600));
-      
-      setOrbScale(2.2); // Second step down
-      await new Promise(resolve => setTimeout(resolve, 600));
-      
-      setOrbScale(1.8); // Third step down
-      await new Promise(resolve => setTimeout(resolve, 600));
-      
-      setOrbScale(1.4); // Fourth step down
-      await new Promise(resolve => setTimeout(resolve, 600));
-      
-      setOrbScale(1.1); // Near final size
-      await new Promise(resolve => setTimeout(resolve, 600));
-      
-      // Final scale to perfect size with extended duration
-      setOrbScale(1);
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      // Phase 2: Smooth transition to text synchronization
-      setOrbAnimationPhase('textSync');
+      // Ultra-smooth multi-step scale down animation
+      setOrbScale(2.2); // First gentle reduction
       await new Promise(resolve => setTimeout(resolve, 400));
       
-      // Start text animation with perfect orb synchronization
+      setOrbScale(1.8); // Second step down
+      await new Promise(resolve => setTimeout(resolve, 400));
+      
+      setOrbScale(1.4); // Third step down
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      setOrbScale(1.1); // Near final size
+      await new Promise(resolve => setTimeout(resolve, 400));
+      
+      // Final scale to normal size with extended duration
+      setOrbScale(1);
+      await new Promise(resolve => setTimeout(resolve, 600));
+      
+      // Phase 2: Extended gradual transition to text sync (1200ms overlap for maximum smoothness)
+      setOrbAnimationPhase('textSync');
+      await new Promise(resolve => setTimeout(resolve, 600)); // Extended pre-text sync breathing
+      
+      // Start text animation with orb fully synchronized for perfect coordination
       setShowText(true);
       setIsTextAnimating(true);
       setHasAnimated(true);
       
-      // Phase 3: Extended sync period for complete text animation (6 seconds)
-      await new Promise(resolve => setTimeout(resolve, 6000));
+      // Phase 3: Extended sync duration for full text animation experience (5 seconds)
+      await new Promise(resolve => setTimeout(resolve, 5000));
       
-      // Phase 4: Gentle transition to idle state
+      // Phase 4: Ultra-gentle transition to idle state with extended cross-fade
       setIsTextAnimating(false);
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 800)); // Extended overlap for natural fadeout
       setOrbAnimationPhase('idle');
     };
 
@@ -121,27 +115,25 @@ const Hero = () => {
           <div className="absolute inset-0 flex items-center justify-center">
             <div 
               className={`w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] lg:w-[600px] lg:h-[600px] xl:w-[700px] xl:h-[700px] 2xl:w-[800px] 2xl:h-[800px] relative transition-all ${
-                orbAnimationPhase === 'loading' ? 'duration-[600ms] ease-out' : 
-                orbAnimationPhase === 'textSync' ? 'duration-[400ms] ease-in-out' : 
-                exitAnimation ? 'duration-[400ms] ease-out' : 'duration-[800ms] ease-in-out'
+                orbAnimationPhase === 'loading' ? 'duration-[1200ms] ease-out' : 
+                orbAnimationPhase === 'textSync' ? 'duration-[800ms] ease-in-out' : 
+                exitAnimation ? 'duration-[400ms] ease-out' : 'duration-[1000ms] ease-in-out'
               }`}
               style={{ 
                 transform: `scale(${orbScale})`,
-                opacity: exitAnimation && orbScale > 3 ? 0.2 : orbOpacity,
-                filter: exitAnimation ? 'blur(2px)' : 'none'
+                opacity: exitAnimation && orbScale > 3 ? 0.3 : 1,
+                filter: exitAnimation ? 'blur(1px)' : 'none'
               }}
             >
-              <EnhancedOrb
+              <MultiLayeredOrb
                 isTextAnimating={isTextAnimating}
                 audioIntensity={
-                  orbAnimationPhase === 'loading' ? 0.3 :
-                  orbAnimationPhase === 'textSync' ? (isTextAnimating ? 0.7 : 0.5) :
-                  0.1
+                  orbAnimationPhase === 'loading' ? 0.25 :
+                  orbAnimationPhase === 'textSync' ? (isTextAnimating ? 0.45 : 0.35) :
+                  0.12
                 }
                 pulseActive={orbAnimationPhase === 'textSync'}
                 animationPhase={orbAnimationPhase}
-                hoverIntensity={orbAnimationPhase === 'idle' ? 0.4 : 0.1}
-                rotateOnHover={orbAnimationPhase === 'idle'}
               />
             </div>
           </div>

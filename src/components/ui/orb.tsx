@@ -191,10 +191,10 @@ export const Component: FC<ComponentProps> = ({
         if (container.firstChild) {
             container.removeChild(container.firstChild);
         }
-        container.appendChild(glContext.canvas as HTMLCanvasElement);
+        container.appendChild(glContext.canvas);
 
-        const geometry = new Triangle(glContext as any);
-        const program = new Program(glContext as any, {
+        const geometry = new Triangle(glContext);
+        const program = new Program(glContext, {
         vertex: vert,
         fragment: frag,
         uniforms: {
@@ -213,7 +213,7 @@ export const Component: FC<ComponentProps> = ({
         },
         });
 
-        const mesh = new Mesh(glContext as any, { geometry, program });
+        const mesh = new Mesh(glContext, { geometry, program });
 
         const resize = () => {
             if (!container || !rendererInstance || !glContext) return;
@@ -225,8 +225,8 @@ export const Component: FC<ComponentProps> = ({
             if (width === 0 || height === 0) return;
 
             rendererInstance.setSize(width * dpr, height * dpr); // Set renderer size with DPR
-            (glContext.canvas as HTMLCanvasElement).style.width = width + "px";
-            (glContext.canvas as HTMLCanvasElement).style.height = height + "px";
+            glContext.canvas.style.width = width + "px";
+            glContext.canvas.style.height = height + "px";
             
             program.uniforms.iResolution.value.set(
                 glContext.canvas.width, // Use drawing buffer width/height
@@ -299,8 +299,8 @@ export const Component: FC<ComponentProps> = ({
           if (container) {
             container.removeEventListener("mousemove", handleMouseMove);
             container.removeEventListener("mouseleave", handleMouseLeave);
-            if (glContext && glContext.canvas && (glContext.canvas as HTMLCanvasElement).parentNode === container) {
-              container.removeChild(glContext.canvas as HTMLCanvasElement);
+            if (glContext && glContext.canvas && glContext.canvas.parentNode === container) {
+              container.removeChild(glContext.canvas);
             }
           }
           if (glContext) {

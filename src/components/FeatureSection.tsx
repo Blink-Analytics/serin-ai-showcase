@@ -64,11 +64,8 @@ const FeatureSection = () => {
   }, []);
 
   return (
-    <section id="features" className="scroll-section py-20 px-6 relative overflow-hidden">
-      {/* Unified Gradient Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-accent/5"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,hsl(var(--accent)/0.08),transparent_60%)]"></div>
-      <div className="container mx-auto max-w-6xl relative z-10">
+    <section id="features" className="scroll-section py-20 px-6">
+      <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-accent-violet to-primary bg-clip-text text-transparent">
             Intelligent Features

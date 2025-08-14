@@ -220,8 +220,8 @@ export const AudioReactiveOrb: FC<AudioReactiveOrbProps> = ({
         }
         container.appendChild(glContext.canvas as HTMLCanvasElement);
 
-        const geometry = new Triangle(glContext as any);
-        const program = new Program(glContext as any, {
+        const geometry = new Triangle(glContext);
+        const program = new Program(glContext, {
         vertex: vert,
         fragment: frag,
         uniforms: {
@@ -242,7 +242,7 @@ export const AudioReactiveOrb: FC<AudioReactiveOrbProps> = ({
         },
         });
 
-        const mesh = new Mesh(glContext as any, { geometry, program });
+        const mesh = new Mesh(glContext, { geometry, program });
 
         const resize = () => {
             if (!container || !rendererInstance || !glContext) return;
