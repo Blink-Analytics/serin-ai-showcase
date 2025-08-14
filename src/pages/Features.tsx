@@ -1,5 +1,6 @@
 import { FloatingNavDemo } from "@/components/FloatingNavDemo";
 import AnimatedGradientBackground from "@/components/ui/animated-gradient-background";
+import FloatingOrb from "@/components/ui/floating-orb";
 import { GRADIENT_COLORS, ANIMATION_CONFIG } from "@/lib/gradient-constants";
 import { Brain, MessageCircle, BarChart3, Shield, Zap, Users } from "lucide-react";
 
@@ -56,6 +57,26 @@ const Features = () => {
         topOffset={ANIMATION_CONFIG.SUBTLE.topOffset}
         gradientColors={GRADIENT_COLORS.BACKGROUND}
         gradientStops={GRADIENT_COLORS.STOPS}
+      />
+      
+      {/* Floating Orbs for ambient effects */}
+      <FloatingOrb 
+        className="top-1/4 left-10" 
+        size="small" 
+        hue={240} 
+        opacity={0.15}
+      />
+      <FloatingOrb 
+        className="top-1/2 right-16" 
+        size="medium" 
+        hue={300} 
+        opacity={0.1}
+      />
+      <FloatingOrb 
+        className="bottom-1/4 left-1/4" 
+        size="small" 
+        hue={180} 
+        opacity={0.12}
       />
       
       <div className="relative z-10 pt-32 pb-20 px-8">

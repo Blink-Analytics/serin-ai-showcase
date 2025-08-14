@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useScroll, useMotionValueEvent } from 'framer-motion';
 import { TextEffect } from '@/components/ui/text-effect';
 import AnimatedGradientBackground from '@/components/ui/animated-gradient-background';
-import { MultiLayeredOrb } from '@/components/ui/multi-layered-orb';
+import { AudioReactiveOrb } from '@/components/ui/audio-reactive-orb';
 import { GRADIENT_COLORS, ANIMATION_CONFIG } from '@/lib/gradient-constants';
 
 const Hero = () => {
@@ -69,30 +69,19 @@ const Hero = () => {
         gradientStops={GRADIENT_COLORS.STOPS}
       />
 
-      <div className="max-w-7xl mx-auto px-4 lg:px-8 relative z-10 w-full">
-        <div className="flex flex-col items-center justify-center text-center min-h-screen relative overflow-hidden">
-          
-          {/* Multi-Layered Orb - Center of Attraction */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-[800px] h-[800px] lg:w-[1000px] lg:h-[1000px] relative">
-              <MultiLayeredOrb
-                isTextAnimating={isTextAnimating}
-                audioIntensity={0.9}
-              />
-            </div>
-          </div>
-
-          {/* Text content - overlaid on orb with improved spacing */}
-          <div className="relative z-20 space-y-2 px-4 max-w-full">
+      <div className="max-w-7xl mx-auto px-8 lg:px-16 relative z-10 w-full">
+        <div className="grid lg:grid-cols-2 gap-8 items-center">
+          {/* Left side: Text content */}
+          <div className="space-y-0 text-left">
             {/* First line: "Hello!" */}
-            <div className="relative mb-6">
+            <div className="relative">
               <TextEffect
                 key={`hello-${animationKey}`}
                 as="h1"
                 per="char"
                 delay={0}
                 trigger={showText}
-                className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight text-white drop-shadow-2xl font-arimo leading-none"
+                className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white drop-shadow-2xl font-arimo leading-none"
                 preset="blur"
                 variants={{
                   container: {
@@ -145,20 +134,20 @@ const Hero = () => {
               >
                 Hello!
               </TextEffect>
-              {/* Enhanced glow effect behind "Hello!" with violet theme */}
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400/40 via-purple-500/50 to-violet-600/40 blur-3xl scale-150 -z-10" />
+              {/* Intense glow effect behind "Hello!" */}
+              <div className={`absolute inset-0 bg-gradient-to-r ${GRADIENT_COLORS.GLOW.BLUE} blur-3xl scale-150 -z-10 opacity-60`} />
             </div>
             
             {/* Second line: "I'm Serin" */}
-            <div className="relative">
-              <div className="flex items-center justify-center gap-3 flex-wrap">
+            <div className="relative pb-4">
+              <div className="flex items-baseline gap-4">
                 <TextEffect
                   key={`im-${animationKey}`}
                   as="span"
                   per="char"
                   delay={0.6}
                   trigger={showText}
-                  className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-wide text-white drop-shadow-2xl font-arimo leading-none"
+                  className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-wide text-white drop-shadow-2xl font-arimo leading-none"
                   preset="blur"
                   variants={{
                     container: {
@@ -218,7 +207,7 @@ const Hero = () => {
                   per="char"
                   delay={0.8}
                   trigger={showText}
-                  className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight drop-shadow-[0_0_25px_rgba(168,85,247,0.8)] font-arimo leading-[1.05] max-w-full"
+                  className="text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] font-black tracking-tighter drop-shadow-[0_0_25px_rgba(138,43,226,0.8)] font-arimo leading-[1.05]"
                   preset="gradient"
                   variants={{
                     container: {
@@ -272,9 +261,26 @@ const Hero = () => {
                   Serin
                 </TextEffect>
               </div>
-              {/* Enhanced glow effect behind "I'm Serin" with purple theme */}
-              <div className="absolute inset-0 bg-gradient-to-r from-violet-500/30 via-purple-500/40 to-blue-500/30 blur-3xl scale-130 -z-10" />
+              {/* Enhanced glow effect behind "I'm Serin" */}
+              <div className={`absolute inset-0 bg-gradient-to-r ${GRADIENT_COLORS.GLOW.ENHANCED} blur-3xl scale-130 -z-10 opacity-50`} />
             </div>
+          </div>
+
+          {/* Right side: Audio-Reactive Orb */}
+          <div className="relative flex justify-center items-center h-[600px] lg:h-[700px]">
+            <div className="w-full h-full max-w-[500px] max-h-[500px] relative">
+              <AudioReactiveOrb
+                hue={210} // Blue to match website theme
+                hoverIntensity={0.6}
+                rotateOnHover={true}
+                forceHoverState={false}
+                audioReactive={true}
+                isReactingToAudio={isTextAnimating}
+                audioIntensity={0.8}
+              />
+            </div>
+            {/* Subtle glow behind orb */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/15 to-blue-600/10 blur-3xl scale-110 -z-10" />
           </div>
         </div>
       </div>

@@ -69,8 +69,8 @@ const Hero = () => {
         gradientStops={GRADIENT_COLORS.STOPS}
       />
 
-      <div className="max-w-7xl mx-auto px-4 lg:px-8 relative z-10 w-full">
-        <div className="flex flex-col items-center justify-center text-center min-h-screen relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-8 lg:px-16 relative z-10 w-full">
+        <div className="flex flex-col items-center justify-center text-center min-h-screen relative">
           
           {/* Multi-Layered Orb - Center of Attraction */}
           <div className="absolute inset-0 flex items-center justify-center">
@@ -82,17 +82,17 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Text content - overlaid on orb with improved spacing */}
-          <div className="relative z-20 space-y-2 px-4 max-w-full">
+          {/* Text content - overlaid on orb */}
+          <div className="relative z-20 space-y-0">
             {/* First line: "Hello!" */}
-            <div className="relative mb-6">
+            <div className="relative mb-4">
               <TextEffect
                 key={`hello-${animationKey}`}
                 as="h1"
                 per="char"
                 delay={0}
                 trigger={showText}
-                className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black tracking-tight text-white drop-shadow-2xl font-arimo leading-none"
+                className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white drop-shadow-2xl font-arimo leading-none"
                 preset="blur"
                 variants={{
                   container: {
@@ -145,20 +145,20 @@ const Hero = () => {
               >
                 Hello!
               </TextEffect>
-              {/* Enhanced glow effect behind "Hello!" with violet theme */}
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400/40 via-purple-500/50 to-violet-600/40 blur-3xl scale-150 -z-10" />
+              {/* Intense glow effect behind "Hello!" */}
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-400/40 via-red-500/50 to-violet-600/40 blur-3xl scale-150 -z-10" />
             </div>
             
             {/* Second line: "I'm Serin" */}
             <div className="relative">
-              <div className="flex items-center justify-center gap-3 flex-wrap">
+              <div className="flex items-baseline justify-center gap-4">
                 <TextEffect
                   key={`im-${animationKey}`}
                   as="span"
                   per="char"
                   delay={0.6}
                   trigger={showText}
-                  className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-wide text-white drop-shadow-2xl font-arimo leading-none"
+                  className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-wide text-white drop-shadow-2xl font-arimo leading-none"
                   preset="blur"
                   variants={{
                     container: {
@@ -218,7 +218,7 @@ const Hero = () => {
                   per="char"
                   delay={0.8}
                   trigger={showText}
-                  className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight drop-shadow-[0_0_25px_rgba(168,85,247,0.8)] font-arimo leading-[1.05] max-w-full"
+                  className="text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] font-black tracking-tighter drop-shadow-[0_0_25px_rgba(239,68,68,0.8)] font-arimo leading-[1.05]"
                   preset="gradient"
                   variants={{
                     container: {
@@ -272,8 +272,8 @@ const Hero = () => {
                   Serin
                 </TextEffect>
               </div>
-              {/* Enhanced glow effect behind "I'm Serin" with purple theme */}
-              <div className="absolute inset-0 bg-gradient-to-r from-violet-500/30 via-purple-500/40 to-blue-500/30 blur-3xl scale-130 -z-10" />
+              {/* Enhanced glow effect behind "I'm Serin" */}
+              <div className="absolute inset-0 bg-gradient-to-r from-violet-500/30 via-red-500/40 to-blue-500/30 blur-3xl scale-130 -z-10" />
             </div>
           </div>
         </div>
