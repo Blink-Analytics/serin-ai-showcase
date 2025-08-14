@@ -1,73 +1,65 @@
-# Welcome to your Lovable project
+# Serin AI Showcase
 
-## Project info
+This project is a modern web showcase for the Serin AI platform, built with React, TypeScript, Vite, Tailwind CSS, and shadcn/ui. It features a visually striking hero section with a multi-layered orb, interactive text effects, and a beautiful gradient background. The design emphasizes clarity, accessibility, and a cohesive blue/violet color palette.
 
-**URL**: https://lovable.dev/projects/a2a5c207-1c3c-42cc-9b49-8d5f993ea058
+## Features
+- **Multi-layered Orb**: Centerpiece visual rendered with WebGL (OGL), using theme-matching blue and violet shades
+- **Animated Gradient Background**: Smooth, theme-consistent gradients
+- **Text Effects**: Dynamic, readable hero text with glow and blur effects
+- **Responsive Layout**: Works well on desktop and mobile
+- **Component-based Architecture**: Easily extendable and maintainable
 
-## How can I edit this code?
+## Technologies Used
+- React & TypeScript
+- Vite (fast development/build tool)
+- Tailwind CSS (utility-first styling)
+- shadcn/ui (UI component library)
+- OGL (WebGL rendering for orb)
+- Framer Motion (for text transitions)
 
-There are several ways of editing your application.
+## Getting Started
 
-**Use Lovable**
+### Prerequisites
+- Node.js (v18 or newer recommended)
+- npm (comes with Node.js)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/a2a5c207-1c3c-42cc-9b49-8d5f993ea058) and start prompting.
+### Installation
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/Blink-Analytics/serin-ai-showcase.git
+   cd serin-ai-showcase
+   ```
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
+### Running the Website
+Start the development server:
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+- The site will be available at `http://localhost:8080/` (or another port if 8080 is in use).
+- Open the URL in your browser to view the Serin AI Showcase.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Building for Production
+To create an optimized production build:
+```sh
+npm run build
+```
 
-**Use GitHub Codespaces**
+The output will be in the `dist` folder, ready to be deployed to any static hosting service.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Project Structure
+- `src/components/` - Main React components (Hero, multi-layered orb, text effects, etc.)
+- `src/lib/` - Shared constants and utility functions
+- `public/` - Static assets (favicon, audio samples, etc.)
+- `index.html` - Main HTML entry point
+- `package.json` - Project metadata and scripts
 
-## What technologies are used for this project?
+## License
+This project is licensed under the MIT License.
 
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/a2a5c207-1c3c-42cc-9b49-8d5f993ea058) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+---
+For questions or contributions, please open an issue or pull request on GitHub.
