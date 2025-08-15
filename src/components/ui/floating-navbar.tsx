@@ -7,7 +7,8 @@ import {
   useMotionValueEvent,
 } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useNavTransition } from "@/hooks/useNavTransition";
 
 export const FloatingNav = ({
   navItems,
@@ -26,6 +27,7 @@ export const FloatingNav = ({
 }) => {
   const { scrollYProgress } = useScroll();
   const location = useLocation();
+  const { navigateWithTransition, isNavigating } = useNavTransition();
 
   const [visible, setVisible] = useState(!waitForIntro || alwaysVisible);
   const [introComplete, setIntroComplete] = useState(!waitForIntro || alwaysVisible);
@@ -98,15 +100,19 @@ export const FloatingNav = ({
           const isActive = location.pathname === navItem.link;
           
           return (
-            <Link
+            <motion.button
               key={`link=${idx}`}
-              to={navItem.link}
+              onClick={() => navigateWithTransition(navItem.link)}
               className={cn(
                 "relative items-center flex space-x-1 transition-all duration-300 px-3 py-2 rounded-full",
                 isActive 
                   ? "text-white bg-white/10 shadow-lg" 
-                  : "text-gray-300 hover:text-white hover:bg-white/5"
+                  : "text-gray-300 hover:text-white hover:bg-white/5",
+                isNavigating && "opacity-50 cursor-not-allowed"
               )}
+              disabled={isNavigating}
+              whileHover={{ scale: isNavigating ? 1 : 1.05 }}
+              whileTap={{ scale: isNavigating ? 1 : 0.95 }}
             >
               <span className="block sm:hidden">{navItem.icon}</span>
               <span className="hidden sm:block text-sm font-arimo font-medium">{navItem.name}</span>
@@ -131,13 +137,14 @@ export const FloatingNav = ({
                 whileHover={{ opacity: 1 }}
                 transition={{ duration: 0.2 }}
               />
-            </Link>
+            </motion.button>
           );
         })}
         <motion.button 
           className="border text-sm font-medium relative border-white/20 text-white px-4 py-2 rounded-full hover:bg-white/10 transition-all duration-300 font-arimo"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
+          onClick={() => navigateWithTransition("/login")}
         >
           <span>Login</span>
           <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-purple-500 to-transparent h-px" />

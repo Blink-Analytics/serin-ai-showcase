@@ -1,5 +1,6 @@
 import { FloatingNavDemo } from "@/components/FloatingNavDemo";
 import AnimatedGradientBackground from "@/components/ui/animated-gradient-background";
+import { Footer } from "@/components/ui/footer-section-new";
 import { GRADIENT_COLORS, ANIMATION_CONFIG } from "@/lib/gradient-constants";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { useState } from "react";
@@ -50,7 +51,7 @@ const Contact = () => {
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto font-arimo">
               Ready to revolutionize your hiring process? Get in touch with our team 
-              to learn more about Serin's capabilities.
+              to learn more about Shree's capabilities.
             </p>
           </div>
           
@@ -149,7 +150,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-white font-arimo">Email</h3>
-                      <p className="text-gray-300 font-arimo">hello@serin.ai</p>
+                      <p className="text-gray-300 font-arimo">hello@shree.ai</p>
                     </div>
                   </div>
                   
@@ -183,7 +184,7 @@ const Contact = () => {
                   Schedule a Demo
                 </h3>
                 <p className="text-gray-300 mb-6 font-arimo">
-                  See Serin in action! Book a personalized demo to experience 
+                  See Shree in action! Book a personalized demo to experience 
                   our AI interview agent firsthand.
                 </p>
                 <button className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all duration-200 font-arimo">
@@ -194,6 +195,9 @@ const Contact = () => {
           </div>
         </div>
       </div>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };

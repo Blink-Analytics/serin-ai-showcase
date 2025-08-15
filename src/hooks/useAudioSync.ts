@@ -11,13 +11,13 @@ interface AudioSyncOptions {
       start: number;
       duration: number;
     };
-    serin: {
+    shree: {
       start: number;
       duration: number;
     };
   };
   fallbackMode?: boolean; // Auto-play without audio if file not found
-  onAnimationStart?: (section: 'hello' | 'im' | 'serin') => void;
+  onAnimationStart?: (section: 'hello' | 'im' | 'shree') => void;
   onAnimationComplete?: () => void;
 }
 
@@ -26,7 +26,7 @@ export const useAudioSync = (options: AudioSyncOptions) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [showHello, setShowHello] = useState(false);
   const [showIm, setShowIm] = useState(false);
-  const [showSerin, setShowSerin] = useState(false);
+  const [showShree, setShowShree] = useState(false);
   const [audioLoaded, setAudioLoaded] = useState(false);
   const [audioError, setAudioError] = useState(false);
   const [isFallbackMode, setIsFallbackMode] = useState(false);
@@ -87,11 +87,11 @@ export const useAudioSync = (options: AudioSyncOptions) => {
   const playFallback = useCallback(() => {
     setShowHello(false);
     setShowIm(false);
-    setShowSerin(false);
+    setShowShree(false);
     clearTimers();
     setIsPlaying(true);
 
-    const { hello, im, serin } = options.animationTimings;
+    const { hello, im, shree } = options.animationTimings;
 
     // Hello animation
     const helloTimer = setTimeout(() => {
@@ -107,18 +107,18 @@ export const useAudioSync = (options: AudioSyncOptions) => {
     }, im.start);
     timersRef.current.push(imTimer);
 
-    // Serin animation
-    const serinTimer = setTimeout(() => {
-      setShowSerin(true);
-      options.onAnimationStart?.('serin');
-    }, serin.start);
-    timersRef.current.push(serinTimer);
+    // Shree animation
+    const shreeTimer = setTimeout(() => {
+      setShowShree(true);
+      options.onAnimationStart?.('shree');
+    }, shree.start);
+    timersRef.current.push(shreeTimer);
 
     // Complete animation
     const completeTimer = setTimeout(() => {
       setIsPlaying(false);
       options.onAnimationComplete?.();
-    }, Math.max(hello.start + hello.duration, im.start + im.duration, serin.start + serin.duration));
+    }, Math.max(hello.start + hello.duration, im.start + im.duration, shree.start + shree.duration));
     timersRef.current.push(completeTimer);
   }, [options, clearTimers]);
 
@@ -136,7 +136,7 @@ export const useAudioSync = (options: AudioSyncOptions) => {
       // Reset states
       setShowHello(false);
       setShowIm(false);
-      setShowSerin(false);
+      setShowShree(false);
       clearTimers();
 
       // Start audio
@@ -145,7 +145,7 @@ export const useAudioSync = (options: AudioSyncOptions) => {
       setIsPlaying(true);
 
       // Schedule animations based on audio timings
-      const { hello, im, serin } = options.animationTimings;
+      const { hello, im, shree } = options.animationTimings;
 
       // Hello animation
       const helloTimer = setTimeout(() => {
@@ -161,12 +161,12 @@ export const useAudioSync = (options: AudioSyncOptions) => {
       }, im.start);
       timersRef.current.push(imTimer);
 
-      // Serin animation
-      const serinTimer = setTimeout(() => {
-        setShowSerin(true);
-        options.onAnimationStart?.('serin');
-      }, serin.start);
-      timersRef.current.push(serinTimer);
+      // Shree animation
+      const shreeTimer = setTimeout(() => {
+        setShowShree(true);
+        options.onAnimationStart?.('shree');
+      }, shree.start);
+      timersRef.current.push(shreeTimer);
 
     } catch (error) {
       console.error('Error playing audio:', error);
@@ -184,7 +184,7 @@ export const useAudioSync = (options: AudioSyncOptions) => {
     setIsPlaying(false);
     setShowHello(false);
     setShowIm(false);
-    setShowSerin(false);
+    setShowShree(false);
     clearTimers();
   }, [clearTimers, audioError]);
 
@@ -233,7 +233,7 @@ export const useAudioSync = (options: AudioSyncOptions) => {
     isFallbackMode,
     showHello,
     showIm,
-    showSerin,
+    showShree,
     
     // Controls
     play,

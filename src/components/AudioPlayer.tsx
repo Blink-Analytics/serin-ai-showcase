@@ -11,7 +11,7 @@ const AudioPlayer = () => {
   // In production, you would replace this with actual audio files
   const speakGreeting = () => {
     if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance("Hello! I'm Serin, your intelligent AI interview agent.");
+      const utterance = new SpeechSynthesisUtterance("Hello! I'm Shree, your intelligent AI interview agent.");
       utterance.rate = 0.9;
       utterance.pitch = 1.1;
       utterance.volume = isMuted ? 0 : 1;

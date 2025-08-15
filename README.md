@@ -1,6 +1,6 @@
-# Serin AI Showcase
+# Shree AI Showcase
 
-This project is a modern web showcase for the Serin AI platform, built with React, TypeScript, Vite, Tailwind CSS, and shadcn/ui. It features a visually striking hero section with a multi-layered orb, interactive text effects, and a beautiful gradient background. The design emphasizes clarity, accessibility, and a cohesive blue/violet color palette.
+This project is a modern web showcase for the Shree AI platform, built with React, TypeScript, Vite, Tailwind CSS, and shadcn/ui. It features a visually striking hero section with a multi-layered orb, interactive text effects, and a beautiful gradient background. The design emphasizes clarity, accessibility, and a cohesive blue/violet color palette.
 
 ## Features
 - **Multi-layered Orb**: Centerpiece visual rendered with WebGL (OGL), using theme-matching blue and violet shades
@@ -26,8 +26,8 @@ This project is a modern web showcase for the Serin AI platform, built with Reac
 ### Installation
 1. Clone the repository:
    ```sh
-   git clone https://github.com/Blink-Analytics/serin-ai-showcase.git
-   cd serin-ai-showcase
+   git clone https://github.com/Blink-Analytics/shree-ai-showcase.git
+   cd shree-ai-showcase
    ```
 2. Install dependencies:
    ```sh
@@ -41,7 +41,7 @@ npm run dev
 ```
 
 - The site will be available at `http://localhost:8080/` (or another port if 8080 is in use).
-- Open the URL in your browser to view the Serin AI Showcase.
+- Open the URL in your browser to view the Shree AI Showcase.
 
 ### Building for Production
 To create an optimized production build:
