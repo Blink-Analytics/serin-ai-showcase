@@ -60,9 +60,9 @@ export function Footer() {
 			className="relative w-full max-w-6xl mx-auto flex flex-col items-center justify-center px-6 py-12 lg:py-16"
 			initial={{ opacity: 0, y: 60 }}
 			whileInView={{ opacity: 1, y: 0 }}
-			viewport={{ once: true, amount: 0.3 }}
+			viewport={{ once: true, amount: 0.1, margin: "0px 0px -200px 0px" }}
 			transition={{ 
-				duration: 0.8, 
+				duration: 0.6, 
 				ease: [0.25, 0.1, 0.25, 1] 
 			}}
 		>
@@ -73,8 +73,8 @@ export function Footer() {
 				className="absolute top-0 right-1/2 left-1/2 h-px w-1/4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-transparent via-blue-400/30 to-transparent blur-sm"
 				initial={{ scaleX: 0, opacity: 0 }}
 				whileInView={{ scaleX: 1, opacity: 1 }}
-				viewport={{ once: true, amount: 0.3 }}
-				transition={{ duration: 1.2, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+				viewport={{ once: true, amount: 0.1, margin: "0px 0px -150px 0px" }}
+				transition={{ duration: 0.8, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
 			/>
 
 			<div className="grid w-full gap-8 xl:grid-cols-3 xl:gap-8 relative z-10">
@@ -82,16 +82,16 @@ export function Footer() {
 					className="space-y-4"
 					initial={{ opacity: 0, y: 30 }}
 					whileInView={{ opacity: 1, y: 0 }}
-					viewport={{ once: true, amount: 0.3 }}
-					transition={{ duration: 0.6, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+					viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}
+					transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
 				>
 					{/* Shree AI Logo/Brand */}
 					<motion.div 
 						className="flex items-center space-x-3"
 						initial={{ scale: 0.9, opacity: 0 }}
 						whileInView={{ scale: 1, opacity: 1 }}
-						viewport={{ once: true, amount: 0.3 }}
-						transition={{ duration: 0.8, delay: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+						viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}
+						transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
 					>
 						<div className="w-8 h-8 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg flex items-center justify-center border border-blue-400/20 backdrop-blur-sm">
 							<span className="text-blue-300 font-bold text-sm">S</span>
@@ -104,8 +104,8 @@ export function Footer() {
 						className="text-blue-200/60 mt-8 text-sm md:mt-4 leading-relaxed max-w-md"
 						initial={{ opacity: 0, y: 20 }}
 						whileInView={{ opacity: 1, y: 0 }}
-						viewport={{ once: true, amount: 0.3 }}
-						transition={{ duration: 0.8, delay: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+						viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}
+						transition={{ duration: 0.6, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
 					>
 						Revolutionizing recruitment with AI-powered interviews that understand human potential beyond traditional screening methods.
 					</motion.p>
@@ -113,8 +113,8 @@ export function Footer() {
 						className="text-blue-300/50 text-xs"
 						initial={{ opacity: 0 }}
 						whileInView={{ opacity: 1 }}
-						viewport={{ once: true, amount: 0.3 }}
-						transition={{ duration: 0.8, delay: 1.0, ease: [0.25, 0.1, 0.25, 1] }}
+						viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}
+						transition={{ duration: 0.6, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
 					>
 						© {new Date().getFullYear()} Shree AI. All rights reserved.
 					</motion.p>
@@ -127,15 +127,15 @@ export function Footer() {
 							className="mb-10 md:mb-0"
 							initial={{ opacity: 0, y: 30 }}
 							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true, amount: 0.3 }}
-							transition={{ duration: 0.6, delay: 0.6 + index * 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+							viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}
+							transition={{ duration: 0.5, delay: 0.3 + index * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
 						>
 							<motion.h3 
 								className="text-xs font-semibold text-blue-200/80 tracking-wider uppercase mb-4"
 								initial={{ opacity: 0, x: -20 }}
 								whileInView={{ opacity: 1, x: 0 }}
-								viewport={{ once: true, amount: 0.3 }}
-								transition={{ duration: 0.6, delay: 0.8 + index * 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+								viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}
+								transition={{ duration: 0.5, delay: 0.4 + index * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
 							>
 								{section.label}
 							</motion.h3>
@@ -145,10 +145,10 @@ export function Footer() {
 										key={link.title}
 										initial={{ opacity: 0, x: -10 }}
 										whileInView={{ opacity: 1, x: 0 }}
-										viewport={{ once: true, amount: 0.3 }}
+										viewport={{ once: true, amount: 0.1, margin: "0px 0px -100px 0px" }}
 										transition={{ 
-											duration: 0.5, 
-											delay: 1.0 + index * 0.2 + linkIndex * 0.1, 
+											duration: 0.4, 
+											delay: 0.5 + index * 0.1 + linkIndex * 0.05, 
 											ease: [0.25, 0.1, 0.25, 1] 
 										}}
 									>

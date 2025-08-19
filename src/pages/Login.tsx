@@ -18,8 +18,8 @@ const Login = () => {
       {/* Navigation - always visible on login page */}
       <FloatingNavDemo alwaysVisible={true} />
       
-      {/* Content with responsive spacing */}
-      <div className="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-20 pb-12">
+      {/* Content with enhanced spacing to avoid navigation overlap */}
+      <div className="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-32 pb-12">
         {/* Auth Card */}
         <motion.div
           initial={{ opacity: 0, y: 20, scale: 0.95 }}

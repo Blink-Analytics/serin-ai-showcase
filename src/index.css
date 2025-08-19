@@ -4,6 +4,36 @@
 
 /* Shree AI Design System - Deep blacks with electric blues and violet accents */
 
+/* Prevent over-scrolling and ensure smooth scrolling */
+html, body {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+/* Main page container scroll constraints */
+.page-container {
+  max-height: 100vh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+}
+
+.page-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.page-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.page-container::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.3);
+  border-radius: 3px;
+}
+
+.page-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.5);
+}
+
 @layer base {
   :root {
     /* Base colors - Deep black foundation */
