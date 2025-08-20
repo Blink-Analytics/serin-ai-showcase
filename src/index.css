@@ -378,6 +378,16 @@ html, body {
   text-rendering: optimizeLegibility !important;
 }
 
+.dancing-script {
+  font-family: "Dancing Script", cursive !important;
+  font-weight: 700 !important;
+  font-style: normal !important;
+  font-feature-settings: "liga" 1, "clig" 1, "kern" 1, "calt" 1 !important;
+  font-variant-ligatures: common-ligatures contextual !important;
+  text-rendering: optimizeLegibility !important;
+  letter-spacing: 0.05em !important;
+}
+
 /* Specific targeting for Hello text - ensure cursive font applies to all characters */
 .playwrite-au-qld h1,
 .playwrite-au-qld h1 *,

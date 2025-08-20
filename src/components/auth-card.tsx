@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Mail, ChevronDown, Eye, EyeOff } from "lucide-react"
@@ -8,18 +9,74 @@ interface AuthCardProps {
 }
 
 export function AuthCard({ onForgotPassword }: AuthCardProps) {
+  const navigate = useNavigate()
   const [activeTab, setActiveTab] = useState<"signup" | "signin">("signup")
   const [isLoading, setIsLoading] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [rememberMe, setRememberMe] = useState(false)
   const [firstName, setFirstName] = useState("John")
   const [lastName, setLastName] = useState("")
   const [phoneNumber, setPhoneNumber] = useState("(775) 351-6501")
   const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
+  // Password validation functions
+  const getPasswordStrength = (password: string) => {
+    if (password.length === 0) return { strength: 0, label: "" };
+    if (password.length < 6) return { strength: 1, label: "Weak" };
+    if (password.length < 8) return { strength: 2, label: "Fair" };
+    if (password.length >= 8 && /[A-Z]/.test(password) && /[0-9]/.test(password)) {
+      return { strength: 4, label: "Strong" };
+    }
+    return { strength: 3, label: "Good" };
+  };
+
+  const passwordsMatch = password === confirmPassword && confirmPassword !== "";
+  const passwordStrength = getPasswordStrength(password);
+  const isFormValid = firstName.trim() && lastName.trim() && email.trim() && 
+                     password.length >= 6 && passwordsMatch;
 
   const handleRedirect = () => {
     window.open("https://www.youtube.com/@diecastbydollarall", "_blank")
+  }
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault()
+    
+    // Validate password match
+    if (password !== confirmPassword) {
+      alert("Passwords do not match!")
+      return
+    }
+    
+    // Validate password strength
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters long!")
+      return
+    }
+    
+    setIsLoading(true)
+    
+    // Simulate signup API call
+    setTimeout(() => {
+      setIsLoading(false)
+      // Navigate to post-signup dashboard
+      navigate("/post-signup")
+    }, 2000)
+  }
+
+  const handleSignin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    
+    // Simulate signin API call
+    setTimeout(() => {
+      setIsLoading(false)
+      // For existing users, go to main dashboard
+      navigate("/")
+    }, 1500)
   }
 
   return (
@@ -55,7 +112,7 @@ export function AuthCard({ onForgotPassword }: AuthCardProps) {
           {activeTab === "signup" ? "Create an account" : "Welcome back"}
         </h1>
 
-        <div className="relative overflow-hidden">
+        <div className="relative">
           <div
             className={`transition-all duration-500 ease-in-out transform ${
               activeTab === "signup" ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0 absolute inset-0"
@@ -63,10 +120,7 @@ export function AuthCard({ onForgotPassword }: AuthCardProps) {
           >
             {/* Sign Up Form */}
             <form
-              onSubmit={(e) => {
-                e.preventDefault()
-                handleRedirect()
-              }}
+              onSubmit={handleSignup}
               className="space-y-4"
             >
               {/* Name fields */}
@@ -76,8 +130,9 @@ export function AuthCard({ onForgotPassword }: AuthCardProps) {
                     type="text"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
-                    className="bg-black/20 border border-white/10 rounded-2xl h-14 text-white placeholder:text-white/40 focus:border-white/30 focus:ring-0 text-base transition-all duration-200 hover:bg-black/30 focus:bg-black/30"
+                    className="bg-black/20 border border-white/10 rounded-2xl h-14 text-white placeholder:text-white/40 focus:border-white/50 focus:outline-none focus:ring-2 focus:ring-white/20 text-base transition-all duration-200 hover:bg-black/30 focus:bg-black/30"
                     placeholder="First name"
+                    required
                   />
                 </div>
                 <div className="relative">
@@ -85,8 +140,9 @@ export function AuthCard({ onForgotPassword }: AuthCardProps) {
                     type="text"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
-                    className="bg-black/20 border border-white/10 rounded-2xl h-14 text-white placeholder:text-white/40 focus:border-white/30 focus:ring-0 text-base transition-all duration-200 hover:bg-black/30 focus:bg-black/30"
+                    className="bg-black/20 border border-white/10 rounded-2xl h-14 text-white placeholder:text-white/40 focus:border-white/50 focus:outline-none focus:ring-2 focus:ring-white/20 text-base transition-all duration-200 hover:bg-black/30 focus:bg-black/30"
                     placeholder="Last name"
+                    required
                   />
                 </div>
               </div>
@@ -98,8 +154,9 @@ export function AuthCard({ onForgotPassword }: AuthCardProps) {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="bg-black/20 border border-white/10 rounded-2xl h-14 text-white placeholder:text-white/40 focus:border-white/30 focus:ring-0 pl-12 text-base transition-all duration-200 hover:bg-black/30 focus:bg-black/30"
+                  className="bg-black/20 border border-white/10 rounded-2xl h-14 text-white placeholder:text-white/40 focus:border-white/50 focus:outline-none focus:ring-2 focus:ring-white/20 pl-12 text-base transition-all duration-200 hover:bg-black/30 focus:bg-black/30"
                   placeholder="Enter your email"
+                  required
                 />
               </div>
 
@@ -117,16 +174,104 @@ export function AuthCard({ onForgotPassword }: AuthCardProps) {
                   type="tel"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
-                  className="bg-black/20 border border-white/10 rounded-2xl h-14 text-white placeholder:text-white/40 focus:border-white/30 focus:ring-0 pl-20 text-base transition-all duration-200 hover:bg-black/30 focus:bg-black/30"
+                  className="bg-black/20 border border-white/10 rounded-2xl h-14 text-white placeholder:text-white/40 focus:border-white/50 focus:outline-none focus:ring-2 focus:ring-white/20 pl-20 text-base transition-all duration-200 hover:bg-black/30 focus:bg-black/30"
                   placeholder="Phone number"
                 />
               </div>
 
+              {/* Password field */}
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="bg-black/20 border border-white/10 rounded-2xl h-14 text-white placeholder:text-white/40 focus:border-white/50 focus:outline-none focus:ring-2 focus:ring-white/20 pr-12 text-base transition-all duration-200 hover:bg-black/30 focus:bg-black/30"
+                  placeholder="Create password"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/40 hover:text-white/60 transition-colors duration-200"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+
+              {/* Password strength indicator */}
+              {password && (
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-white/60">Password strength</span>
+                    <span className={`text-sm font-medium ${
+                      passwordStrength.strength === 1 ? 'text-red-400' :
+                      passwordStrength.strength === 2 ? 'text-yellow-400' :
+                      passwordStrength.strength === 3 ? 'text-blue-400' :
+                      passwordStrength.strength === 4 ? 'text-green-400' : 'text-white/40'
+                    }`}>
+                      {passwordStrength.label}
+                    </span>
+                  </div>
+                  <div className="flex gap-1">
+                    {[1, 2, 3, 4].map((level) => (
+                      <div
+                        key={level}
+                        className={`h-1 flex-1 rounded-full transition-colors duration-200 ${
+                          level <= passwordStrength.strength
+                            ? passwordStrength.strength === 1 ? 'bg-red-400' :
+                              passwordStrength.strength === 2 ? 'bg-yellow-400' :
+                              passwordStrength.strength === 3 ? 'bg-blue-400' :
+                              'bg-green-400'
+                            : 'bg-white/20'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Confirm Password field */}
+              <div className="relative">
+                <Input
+                  type={showConfirmPassword ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className={`bg-black/20 border rounded-2xl h-14 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 pr-12 text-base transition-all duration-200 hover:bg-black/30 focus:bg-black/30 ${
+                    confirmPassword && !passwordsMatch 
+                      ? 'border-red-400/50 focus:border-red-400/70 focus:ring-red-400/20' 
+                      : confirmPassword && passwordsMatch
+                      ? 'border-green-400/50 focus:border-green-400/70 focus:ring-green-400/20'
+                      : 'border-white/10 focus:border-white/50'
+                  }`}
+                  placeholder="Confirm password"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/40 hover:text-white/60 transition-colors duration-200"
+                >
+                  {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+
+              {/* Password match indicator */}
+              {confirmPassword && (
+                <div className={`text-sm flex items-center gap-2 ${
+                  passwordsMatch ? 'text-green-400' : 'text-red-400'
+                }`}>
+                  <div className={`w-2 h-2 rounded-full ${
+                    passwordsMatch ? 'bg-green-400' : 'bg-red-400'
+                  }`} />
+                  {passwordsMatch ? 'Passwords match' : 'Passwords do not match'}
+                </div>
+              )}
+
               {/* Create account button */}
               <Button
                 type="submit"
-                className="w-full bg-white/20 border border-white/20 hover:bg-white/30 text-white font-medium rounded-2xl h-14 mt-8 text-base transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg active:scale-[0.98]"
-                disabled={isLoading}
+                className="w-full bg-white/20 border border-white/20 hover:bg-white/30 text-white font-medium rounded-2xl h-14 mt-8 text-base transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                disabled={isLoading || !isFormValid}
               >
                 {isLoading ? "Creating account..." : "Create an account"}
               </Button>
@@ -139,10 +284,7 @@ export function AuthCard({ onForgotPassword }: AuthCardProps) {
             }`}
           >
             <form
-              onSubmit={(e) => {
-                e.preventDefault()
-                handleRedirect()
-              }}
+              onSubmit={handleSignin}
               className="space-y-4"
             >
               {/* Email field */}
@@ -152,7 +294,7 @@ export function AuthCard({ onForgotPassword }: AuthCardProps) {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="bg-black/20 border border-white/10 rounded-2xl h-14 text-white placeholder:text-white/40 focus:border-white/30 focus:ring-0 pl-12 text-base transition-all duration-200 hover:bg-black/30 focus:bg-black/30"
+                  className="bg-black/20 border border-white/10 rounded-2xl h-14 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-white/50 pl-12 text-base transition-all duration-200 hover:bg-black/30 focus:bg-black/30"
                   placeholder="Enter your email"
                 />
               </div>
@@ -163,7 +305,7 @@ export function AuthCard({ onForgotPassword }: AuthCardProps) {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="bg-black/20 border border-white/10 rounded-2xl h-14 text-white placeholder:text-white/40 focus:border-white/30 focus:ring-0 pr-12 text-base transition-all duration-200 hover:bg-black/30 focus:bg-black/30"
+                  className="bg-black/20 border border-white/10 rounded-2xl h-14 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-white/50 pr-12 text-base transition-all duration-200 hover:bg-black/30 focus:bg-black/30"
                   placeholder="Enter your password"
                 />
                 <button

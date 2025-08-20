@@ -379,31 +379,28 @@ export const MultiLayeredOrb: FC<MultiLayeredOrbProps> = ({
           
           switch (animationPhase) {
             case 'loading':
-              // Steady glow during orb scaling
-              targetIntensity = audioIntensity * audioScale;
+              // Steady glow during orb scaling - reduced intensity
+              targetIntensity = audioIntensity * audioScale * 0.3;
               break;
             case 'textSync':
-              // Unified wave during text - single calculation
-              const wave = Math.sin(t * 0.0012) * 0.12;
-              const pulse = pulseActive ? Math.sin(t * 0.002) * 0.08 : 0;
-              targetIntensity = (audioIntensity * audioScale) + wave + pulse;
+              // More controlled animation during text - reduced pulsing
+              const wave = Math.sin(t * 0.0008) * 0.05; // Reduced wave intensity
+              const pulse = pulseActive ? Math.sin(t * 0.001) * 0.03 : 0; // Reduced pulse intensity
+              targetIntensity = (audioIntensity * audioScale * 0.4) + wave + pulse;
               break;
             case 'idle':
             default:
-              // Gentle rotation with subtle variation - no pulsating but not completely static
-              const hasInteraction = program.uniforms.hover.value > 0.01 || audioIntensity > 0.1 || isSpeaking;
+              // Simple revolving motion with minimal variation - only pulse on hover
+              const hasHover = program.uniforms.hover.value > 0.01;
               
-              if (hasInteraction) {
-                // Enhanced effects when there's interaction or speaking
-                const gentle = Math.sin(t * 0.0005 + index * 0.5) * 0.008;
-                const rotate = Math.sin(t * 0.0003) * 0.003;
-                const speakingPulse = isSpeaking ? Math.sin(t * 0.002) * 0.06 : 0;
-                targetIntensity = (audioIntensity * audioScale * 0.6) + gentle + rotate + speakingPulse;
+              if (hasHover) {
+                // Gentle pulse only when hovering/interacting
+                const hoverPulse = Math.sin(t * 0.002) * 0.08;
+                const gentle = Math.sin(t * 0.0005 + index * 0.5) * 0.01;
+                targetIntensity = hoverPulse + gentle;
               } else {
-                // Calm idle state with subtle rotation - alive but peaceful
-                const subtleRotation = Math.sin(t * 0.0002 + index * 0.3) * 0.004; // Very slow rotation
-                const breathingEffect = Math.sin(t * 0.0001) * 0.002; // Extremely gentle breathing
-                targetIntensity = 0.025 + subtleRotation + breathingEffect; // Base value with gentle movement
+                // Very minimal baseline activity - just gentle rotation
+                targetIntensity = Math.sin(t * 0.0003 + index * 0.5) * 0.005; // Very subtle
               }
               break;
           }

@@ -48,7 +48,7 @@ const Index = () => {
           {/* Floating Navigation */}
           <FloatingNavDemo waitForIntro={true} />
           
-          {/* Seamless gradient background that extends throughout */}
+          {/* Seamless gradient background that extends throughout all sections */}
           <AnimatedGradientBackground 
             Breathing={true}
             startingGap={ANIMATION_CONFIG.SUBTLE.startingGap}
@@ -58,22 +58,20 @@ const Index = () => {
             gradientColors={GRADIENT_COLORS.BACKGROUND}
             gradientStops={GRADIENT_COLORS.STOPS}
             containerClassName="fixed inset-0"
-            containerStyle={{ height: '200vh' }}
+            containerStyle={{ height: '500vh' }} // Extend to cover all sections
           />
           
-          {/* Enhanced gradient overlay for smooth transitions between sections */}
+          {/* Minimal gradient overlay for very subtle transitions */}
           <div 
             className="fixed inset-0 pointer-events-none z-[1]"
             style={{
-              height: '200vh',
+              height: '500vh',
               background: `linear-gradient(to bottom, 
                 transparent 0%, 
-                transparent 40%, 
-                rgba(0,0,0,0.02) 60%, 
-                rgba(0,0,0,0.05) 75%, 
-                rgba(0,0,0,0.1) 85%, 
-                rgba(0,0,0,0.2) 95%, 
-                rgba(0,0,0,0.3) 100%)`
+                transparent 80%, 
+                rgba(0,0,0,0.01) 90%, 
+                rgba(0,0,0,0.03) 95%, 
+                rgba(0,0,0,0.05) 100%)`
             }}
           />
           

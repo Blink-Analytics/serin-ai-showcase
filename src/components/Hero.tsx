@@ -53,14 +53,14 @@ const Hero = () => {
     const scrollProgress = latest / windowHeight;
 
     if (scrollProgress > 0.1) {
-      // Start orb exit animation with scaling
-      const scaleProgress = Math.min((scrollProgress - 0.1) / 1.5, 2);
-      const newScale = 1 + scaleProgress * 8; // Scale up to 9x size
+      // Start orb exit animation with scaling - expand globally across all sections
+      const scaleProgress = Math.min((scrollProgress - 0.1) / 4.0, 4); // Expand over 4 viewport heights
+      const newScale = 1 + scaleProgress * 25; // Scale up to 26x size for screen coverage
       setOrbScale(newScale);
       
       if (!exitAnimation) setExitAnimation(true);
       
-      // Hide text when scrolling down significantly
+      // Hide hero text when scrolling down significantly
       if (scrollProgress > 0.3 && showText) {
         setShowText(false);
       }
@@ -91,13 +91,14 @@ const Hero = () => {
       <div className="max-w-7xl mx-auto px-8 lg:px-16 relative z-10 w-full">
         <div className="flex flex-col items-center justify-center text-center min-h-screen relative">
           
-          {/* Multi-Layered Orb with Exit Animation */}
-          <div className="absolute inset-0 flex items-center justify-center" style={{ height: '200vh', top: '-50vh', overflow: 'visible' }}>
+          {/* Multi-Layered Orb with Global Exit Animation */}
+          <div className="fixed inset-0 flex items-center justify-center pointer-events-none" style={{ height: '100vh', width: '100vw', zIndex: 5 }}>
             <motion.div
               className="w-[800px] h-[800px] lg:w-[1000px] lg:h-[1000px] relative"
+              initial={{ scale: 3, opacity: 0.3 }} // Start from 3x size with lower opacity
               animate={{
                 scale: exitAnimation ? orbScale : 1,
-                opacity: exitAnimation ? Math.max(0, 1 - (orbScale - 1) / 8) : 1,
+                opacity: exitAnimation ? Math.max(0, 1 - (orbScale - 1) / 15) : 1, // Very gradual fade out
                 rotate: exitAnimation ? 0 : [0, 2, -1, 1, 0], 
               }}
               transition={{
@@ -105,16 +106,17 @@ const Hero = () => {
                   duration: 0, // Instant scale updates for smooth scroll following
                   ease: "linear" 
                 } : {
-                  duration: 1.8,
-                  ease: [0.16, 1, 0.3, 1],
-                  delay: 0.2
+                  duration: 2.5, // Slower intro animation
+                  ease: [0.25, 0.46, 0.45, 0.94], // Smooth ease
+                  delay: 0.3
                 },
                 opacity: exitAnimation ? { 
                   duration: 0.3, 
                   ease: "easeOut" 
                 } : {
-                  duration: 1.8,
-                  ease: "easeInOut"
+                  duration: 2.5, // Match scale duration
+                  ease: "easeInOut",
+                  delay: 0.3
                 },
                 rotate: exitAnimation ? { duration: 0.3 } : {
                   duration: 20,
@@ -130,7 +132,7 @@ const Hero = () => {
             >
               <MultiLayeredOrb
                 isTextAnimating={isTextAnimating}
-                audioIntensity={0.9}
+                audioIntensity={0.2}
               />
             </motion.div>
           </div>
@@ -142,10 +144,10 @@ const Hero = () => {
               <TextEffect
                 key={`hello-${animationKey}`}
                 as="h1"
-                per="char"
+                per="word"
                 delay={0}
                 trigger={showText}
-                className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white drop-shadow-2xl font-arimo leading-none"
+                className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white drop-shadow-2xl playwrite-au-qld leading-none"
                 preset="blur"
                 variants={{
                   container: {
@@ -211,7 +213,7 @@ const Hero = () => {
                   per="char"
                   delay={0.6}
                   trigger={showText}
-                  className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-wide text-white drop-shadow-2xl font-arimo leading-none"
+                  className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-wide text-white drop-shadow-2xl playwrite-au-qld leading-none"
                   preset="blur"
                   variants={{
                     container: {

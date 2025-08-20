@@ -86,7 +86,7 @@ export default {
 			},
 			fontFamily: {
 				'arimo': ['Arimo', 'sans-serif'],
-				'playwrite': ['"Playwrite AU NSW"', 'cursive'],
+				'playwrite': ['"Playwrite AU QLD"', 'cursive'],
 				'sans': ['Arimo', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif'],
 			},
 			keyframes: {

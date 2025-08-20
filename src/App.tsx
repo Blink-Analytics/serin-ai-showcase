@@ -15,6 +15,7 @@ import Contact from "./pages/Contact";
 import OrbShowcase from "./pages/OrbShowcase";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
+import PostSignupDashboard from "./pages/PostSignupDashboard";
 import { DemoOne } from "./components/demo";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const AppContent = () => {
           <Route path="/features" element={<Features />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/post-signup" element={<PostSignupDashboard />} />
           <Route path="/orb" element={<OrbShowcase />} />
           <Route path="/demo" element={<DemoOne />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
