@@ -90,8 +90,8 @@ const PostSignupDashboard = () => {
   const handleComplete = () => {
     // Navigate to the appropriate dashboard/page
     console.log("Setup complete!", postSignupData);
-    // For now, redirect to main page or dashboard
-    window.location.href = "/";
+    // Redirect to main dashboard
+    window.location.href = "/dashboard";
   };
 
   const handleBack = () => {

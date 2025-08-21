@@ -75,7 +75,7 @@ export function AuthCard({ onForgotPassword }: AuthCardProps) {
     setTimeout(() => {
       setIsLoading(false)
       // For existing users, go to main dashboard
-      navigate("/")
+      navigate("/dashboard")
     }, 1500)
   }
 
