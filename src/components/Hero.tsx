@@ -1,154 +1,153 @@
 import { useEffect, useState } from 'react';
-import { useScroll, useMotionValueEvent } from 'framer-motion';
+import { motion, useScroll, useMotionValueEvent } from 'framer-motion';
 import { TextEffect } from '@/components/ui/text-effect';
+import { GradientText } from '@/components/ui/gradient-text';
 import AnimatedGradientBackground from '@/components/ui/animated-gradient-background';
 import { MultiLayeredOrb } from '@/components/ui/multi-layered-orb';
 import { GRADIENT_COLORS, ANIMATION_CONFIG } from '@/lib/gradient-constants';
 
 const Hero = () => {
+  // Animation states
   const [showText, setShowText] = useState(false);
   const [hasAnimated, setHasAnimated] = useState(false);
+  const [animationKey, setAnimationKey] = useState(0);
   const [isOrbLoaded, setIsOrbLoaded] = useState(false);
   const [isTextAnimating, setIsTextAnimating] = useState(false);
-  const [orbScale, setOrbScale] = useState(2.8); // Start larger for more dramatic effect
-  const [orbAnimationPhase, setOrbAnimationPhase] = useState<'loading' | 'textSync' | 'idle'>('loading');
   const [exitAnimation, setExitAnimation] = useState(false);
+  const [orbScale, setOrbScale] = useState(1);
+
   const { scrollY } = useScroll();
 
-  // Enhanced animation sequence with ultra-smooth, natural transitions
+  // Start orb loading animation immediately
   useEffect(() => {
-    if (hasAnimated) return; // Prevent multiple animations
-    
-    const sequence = async () => {
-      // Phase 1: Orb loads with gradual, breathing entry (2000ms total)
+    const orbTimer = setTimeout(() => {
       setIsOrbLoaded(true);
-      setOrbAnimationPhase('loading');
-      await new Promise(resolve => setTimeout(resolve, 600)); // Let orb fully initialize and breathe
-      
-      // Ultra-smooth multi-step scale down animation
-      setOrbScale(2.2); // First gentle reduction
-      await new Promise(resolve => setTimeout(resolve, 400));
-      
-      setOrbScale(1.8); // Second step down
-      await new Promise(resolve => setTimeout(resolve, 400));
-      
-      setOrbScale(1.4); // Third step down
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      setOrbScale(1.1); // Near final size
-      await new Promise(resolve => setTimeout(resolve, 400));
-      
-      // Final scale to normal size with extended duration
-      setOrbScale(1);
-      await new Promise(resolve => setTimeout(resolve, 600));
-      
-      // Phase 2: Extended gradual transition to text sync (1200ms overlap for maximum smoothness)
-      setOrbAnimationPhase('textSync');
-      await new Promise(resolve => setTimeout(resolve, 600)); // Extended pre-text sync breathing
-      
-      // Start text animation with orb fully synchronized for perfect coordination
-      setShowText(true);
-      setIsTextAnimating(true);
-      setHasAnimated(true);
-      
-      // Phase 3: Extended sync duration for full text animation experience (5 seconds)
-      await new Promise(resolve => setTimeout(resolve, 5000));
-      
-      // Phase 4: Ultra-gentle transition to idle state with extended cross-fade
-      setIsTextAnimating(false);
-      await new Promise(resolve => setTimeout(resolve, 800)); // Extended overlap for natural fadeout
-      setOrbAnimationPhase('idle');
-    };
+    }, 1000); // Orb loads first
 
-    sequence();
-  }, []); // Empty dependency array - runs only once
+    return () => clearTimeout(orbTimer);
+  }, []);
 
-  // Enhanced scroll-based exit animation with smooth scaling
+  // Start text animation after orb is loaded
+  useEffect(() => {
+    if (isOrbLoaded) {
+      const timer = setTimeout(() => {
+        setShowText(true);
+        setHasAnimated(true);
+        setIsTextAnimating(true);
+        
+        // Stop text animation reaction after text is done
+        setTimeout(() => {
+          setIsTextAnimating(false);
+        }, 3000); // Adjust based on text animation duration
+      }, 800);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isOrbLoaded]);
+
+  // Handle exit animation on scroll - with orb scaling
   useMotionValueEvent(scrollY, "change", (latest) => {
-    if (!hasAnimated) return; // Don't trigger until initial animation is done
-    
+    if (!hasAnimated) return;
+
     const windowHeight = window.innerHeight;
     const scrollProgress = latest / windowHeight;
-    
-    if (scrollProgress > 0.1 && scrollProgress < 0.8) {
-      // Gradual scaling as user scrolls
-      const scaleProgress = Math.min((scrollProgress - 0.1) / 0.7, 1);
-      const newScale = 1 + (scaleProgress * 2.5); // Scale from 1 to 3.5
+
+    if (scrollProgress > 0.1) {
+      // Start orb exit animation with scaling - expand globally across all sections
+      const scaleProgress = Math.min((scrollProgress - 0.1) / 4.0, 4); // Expand over 4 viewport heights
+      const newScale = 1 + scaleProgress * 25; // Scale up to 26x size for screen coverage
       setOrbScale(newScale);
       
-      if (!exitAnimation) {
-        setExitAnimation(true);
-        setOrbAnimationPhase('idle'); // Transition to gentle idle state
-      }
-    } else if (scrollProgress >= 0.8) {
-      // Final enlargement and fade
-      setOrbScale(4);
-      setTimeout(() => {
+      if (!exitAnimation) setExitAnimation(true);
+      
+      // Hide hero text when scrolling down significantly
+      if (scrollProgress > 0.3 && showText) {
         setShowText(false);
-      }, 200);
+      }
     } else if (scrollProgress < 0.05 && exitAnimation) {
-      // Return to normal when scrolling back up
-      setExitAnimation(false);
+      // Reset when scrolled back to top
       setOrbScale(1);
-      setShowText(true);
-      setOrbAnimationPhase('idle');
+      setExitAnimation(false);
+      setAnimationKey(prev => prev + 1);
+      setTimeout(() => {
+        setShowText(true);
+      }, 200);
     }
   });
 
   return (
     <div className="hero-container min-h-screen flex items-center relative overflow-hidden">
-      {/* Optimized Animated Gradient Background */}
+      {/* Enhanced Animated Gradient Background */}
       <AnimatedGradientBackground 
         Breathing={true}
         startingGap={ANIMATION_CONFIG.BREATHING.startingGap}
-        breathingRange={10} // Reduced from 20 for better performance
-        animationSpeed={0.01} // Reduced from 0.02 for smoother performance
+        breathingRange={ANIMATION_CONFIG.BREATHING.breathingRange}
+        animationSpeed={ANIMATION_CONFIG.BREATHING.animationSpeed}
         topOffset={ANIMATION_CONFIG.BREATHING.topOffset}
         gradientColors={GRADIENT_COLORS.BACKGROUND}
         gradientStops={GRADIENT_COLORS.STOPS}
       />
 
-      <div className="w-full mx-auto px-2 sm:px-4 md:px-6 lg:px-8 relative z-10">
-        <div className="flex flex-col items-center justify-center text-center min-h-screen relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-8 lg:px-16 relative z-10 w-full">
+        <div className="flex flex-col items-center justify-center text-center min-h-screen relative">
           
-          {/* Multi-Layered Orb - Center of Attraction - Enhanced Phased Animation */}
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div 
-              className={`w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] md:w-[500px] md:h-[500px] lg:w-[600px] lg:h-[600px] xl:w-[700px] xl:h-[700px] 2xl:w-[800px] 2xl:h-[800px] relative transition-all ${
-                orbAnimationPhase === 'loading' ? 'duration-[1200ms] ease-out' : 
-                orbAnimationPhase === 'textSync' ? 'duration-[800ms] ease-in-out' : 
-                exitAnimation ? 'duration-[400ms] ease-out' : 'duration-[1000ms] ease-in-out'
-              }`}
-              style={{ 
-                transform: `scale(${orbScale})`,
-                opacity: exitAnimation && orbScale > 3 ? 0.3 : 1,
-                filter: exitAnimation ? 'blur(1px)' : 'none'
+          {/* Multi-Layered Orb with Global Exit Animation */}
+          <div className="fixed inset-0 flex items-center justify-center pointer-events-none" style={{ height: '100vh', width: '100vw', zIndex: 5 }}>
+            <motion.div
+              className="w-[800px] h-[800px] lg:w-[1000px] lg:h-[1000px] relative"
+              initial={{ scale: 3, opacity: 0.3 }} // Start from 3x size with lower opacity
+              animate={{
+                scale: exitAnimation ? orbScale : 1,
+                opacity: exitAnimation ? Math.max(0, 1 - (orbScale - 1) / 15) : 1, // Very gradual fade out
+                rotate: exitAnimation ? 0 : [0, 2, -1, 1, 0], 
+              }}
+              transition={{
+                scale: exitAnimation ? { 
+                  duration: 0, // Instant scale updates for smooth scroll following
+                  ease: "linear" 
+                } : {
+                  duration: 2.5, // Slower intro animation
+                  ease: [0.25, 0.46, 0.45, 0.94], // Smooth ease
+                  delay: 0.3
+                },
+                opacity: exitAnimation ? { 
+                  duration: 0.3, 
+                  ease: "easeOut" 
+                } : {
+                  duration: 2.5, // Match scale duration
+                  ease: "easeInOut",
+                  delay: 0.3
+                },
+                rotate: exitAnimation ? { duration: 0.3 } : {
+                  duration: 20,
+                  ease: "easeInOut",
+                  repeat: Infinity,
+                  delay: 2.5
+                }
+              }}
+              style={{
+                willChange: 'transform, opacity',
+                transform: 'translateZ(0)'
               }}
             >
               <MultiLayeredOrb
                 isTextAnimating={isTextAnimating}
-                audioIntensity={
-                  orbAnimationPhase === 'loading' ? 0.25 :
-                  orbAnimationPhase === 'textSync' ? (isTextAnimating ? 0.45 : 0.35) :
-                  0.12
-                }
-                pulseActive={orbAnimationPhase === 'textSync'}
-                animationPhase={orbAnimationPhase}
+                audioIntensity={0.2}
               />
-            </div>
+            </motion.div>
           </div>
 
-          {/* Text content - overlaid on orb with improved responsive spacing */}
-          <div className="relative z-20 space-y-1 sm:space-y-2 px-1 sm:px-2 md:px-4 max-w-full">
+          {/* Text content - overlaid on orb */}
+          <div className="relative z-20 space-y-0">
             {/* First line: "Hello!" */}
-            <div className="relative mb-3 sm:mb-4 md:mb-6">
+            <div className="relative mb-4">
               <TextEffect
-                key="hello-text"
+                key={`hello-${animationKey}`}
                 as="h1"
-                per="char"
+                per="word"
                 delay={0}
                 trigger={showText}
-                className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-black tracking-tight text-white drop-shadow-2xl font-arimo leading-none"
+                className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tight text-white drop-shadow-2xl playwrite-au-qld leading-none"
                 preset="blur"
                 variants={{
                   container: {
@@ -156,17 +155,16 @@ const Hero = () => {
                     visible: {
                       opacity: 1,
                       transition: {
-                        staggerChildren: 0.06, // Slower stagger for smoothness
-                        delayChildren: 0.3,
-                        duration: 1.0, // Longer container animation
+                        staggerChildren: 0.08,
+                        delayChildren: 0.2,
                       },
                     },
                     exit: {
                       opacity: 0,
                       transition: { 
-                        staggerChildren: 0.02, 
+                        staggerChildren: 0.015, 
                         staggerDirection: -1,
-                        duration: 0.5 // Smoother exit
+                        duration: 0.3
                       },
                     },
                   },
@@ -183,8 +181,8 @@ const Hero = () => {
                       y: 0,
                       scale: 1,
                       transition: {
-                        duration: 1.4, // Slightly longer
-                        ease: [0.23, 1, 0.320, 1] // Custom easing for smooth motion
+                        duration: 1.2,
+                        ease: [0.25, 0.46, 0.45, 0.94]
                       }
                     },
                     exit: { 
@@ -193,7 +191,7 @@ const Hero = () => {
                       y: -30,
                       scale: 1.1,
                       transition: {
-                        duration: 0.4, // Smoother exit
+                        duration: 0.3,
                         ease: [0.55, 0.06, 0.68, 0.19]
                       }
                     },
@@ -202,20 +200,20 @@ const Hero = () => {
               >
                 Hello!
               </TextEffect>
-              {/* Enhanced glow effect behind "Hello!" with violet theme */}
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-400/40 via-purple-500/50 to-violet-600/40 blur-3xl scale-150 -z-10" />
+              {/* Intense glow effect behind "Hello!" */}
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-400/40 via-red-500/50 to-violet-600/40 blur-3xl scale-150 -z-10" />
             </div>
             
-            {/* Second line: "I'm Serin" - Improved Responsive */}
+            {/* Second line: "I'm Shree" */}
             <div className="relative">
-              <div className="flex items-center justify-center gap-1 sm:gap-2 md:gap-3 flex-wrap">
+              <div className="flex items-baseline justify-center gap-4">
                 <TextEffect
-                  key="im-text"
+                  key={`im-${animationKey}`}
                   as="span"
                   per="char"
                   delay={0.6}
                   trigger={showText}
-                  className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold tracking-wide text-white drop-shadow-2xl font-arimo leading-none"
+                  className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold tracking-wide text-white drop-shadow-2xl playwrite-au-qld leading-none"
                   preset="blur"
                   variants={{
                     container: {
@@ -223,17 +221,16 @@ const Hero = () => {
                       visible: {
                         opacity: 1,
                         transition: {
-                          staggerChildren: 0.05, // Faster stagger for "I'm"
-                          delayChildren: 0.4,
-                          duration: 0.8,
+                          staggerChildren: 0.06,
+                          delayChildren: 0.3,
                         },
                       },
                       exit: {
                         opacity: 0,
                         transition: { 
-                          staggerChildren: 0.02, 
+                          staggerChildren: 0.015, 
                           staggerDirection: -1,
-                          duration: 0.4 
+                          duration: 0.3 
                         },
                       },
                     },
@@ -250,8 +247,8 @@ const Hero = () => {
                         y: 0,
                         scale: 1,
                         transition: {
-                          duration: 1.2,
-                          ease: [0.23, 1, 0.320, 1] // Matching smooth easing
+                          duration: 1.4,
+                          ease: [0.25, 0.46, 0.45, 0.94]
                         }
                       },
                       exit: { 
@@ -260,7 +257,7 @@ const Hero = () => {
                         y: -25,
                         scale: 1.05,
                         transition: {
-                          duration: 0.6, // Smoother exit
+                          duration: 0.8,
                           ease: [0.55, 0.06, 0.68, 0.19]
                         }
                       },
@@ -270,69 +267,29 @@ const Hero = () => {
                   I'm 
                 </TextEffect>
                 
-                <TextEffect
-                  key="serin-text"
-                  as="span"
-                  per="char"
-                  delay={0.8}
-                  trigger={showText}
-                  className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-9xl font-black tracking-tight drop-shadow-[0_0_25px_rgba(168,85,247,0.8)] font-arimo leading-[1.05] max-w-full"
-                  preset="gradient"
-                  variants={{
-                    container: {
-                      hidden: { opacity: 0 },
-                      visible: {
-                        opacity: 1,
-                        transition: {
-                          staggerChildren: 0.07, // Slightly slower for "Serin"
-                          delayChildren: 0.5,
-                          duration: 1.2,
-                        },
-                      },
-                      exit: {
-                        opacity: 0,
-                        transition: { 
-                          staggerChildren: 0.03, 
-                          staggerDirection: -1,
-                          duration: 0.6 // Longer exit for dramatic effect
-                        },
-                      },
-                    },
-                    item: {
-                      hidden: { 
-                        opacity: 0, 
-                        filter: 'blur(30px)',
-                        y: 50,
-                        scale: 0.8
-                      },
-                      visible: { 
-                        opacity: 1, 
-                        filter: 'blur(0px)',
-                        y: 0,
-                        scale: 1,
-                        transition: {
-                          duration: 1.6, // Longest duration for hero text
-                          ease: [0.23, 1, 0.320, 1] // Matching smooth easing
-                        }
-                      },
-                      exit: { 
-                        opacity: 0, 
-                        filter: 'blur(25px)',
-                        y: -30,
-                        scale: 1.1,
-                        transition: {
-                          duration: 0.8, // Extended exit for dramatic effect
-                          ease: [0.55, 0.06, 0.68, 0.19]
-                        }
-                      },
-                    },
+                <motion.div
+                  initial={{ opacity: 0, filter: 'blur(6px)', y: 15, scale: 0.95 }}
+                  animate={showText ? { 
+                    opacity: 1, 
+                    filter: 'blur(0px)', 
+                    y: 0, 
+                    scale: 1 
+                  } : {}}
+                  transition={{ 
+                    duration: 0.6, 
+                    ease: [0.25, 0.1, 0.25, 1],
+                    delay: 0.8
                   }}
                 >
-                  Serin
-                </TextEffect>
+                  <GradientText
+                    className="text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] font-black tracking-tighter drop-shadow-[0_0_25px_rgba(168,85,247,0.8)] font-arimo leading-[1.05] max-w-full"
+                  >
+                    Shree
+                  </GradientText>
+                </motion.div>
               </div>
-              {/* Enhanced glow effect behind "I'm Serin" with purple theme */}
-              <div className="absolute inset-0 bg-gradient-to-r from-violet-500/30 via-purple-500/40 to-blue-500/30 blur-3xl scale-130 -z-10" />
+              {/* Enhanced glow effect behind "I'm Shree" */}
+              <div className="absolute inset-0 bg-gradient-to-r from-violet-500/30 via-red-500/40 to-blue-500/30 blur-3xl scale-130 -z-10" />
             </div>
           </div>
         </div>

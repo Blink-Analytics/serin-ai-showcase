@@ -49,7 +49,7 @@ const Index = () => {
                 Ready to Transform Your Hiring?
               </h2>
               <p className="text-lg text-gray-300 mb-8">
-                Join leading companies already using Serin to revolutionize their recruitment process.
+                Join leading companies already using Shree to revolutionize their recruitment process.
               </p>
               
               <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-xl rounded-3xl p-8 border border-blue-500/20">
@@ -77,7 +77,7 @@ const Index = () => {
       <footer className="relative z-10 py-8 px-6 border-t border-gray-800/30 bg-black">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center text-gray-400">
-            <p>&copy; 2024 Serin AI. Revolutionizing recruitment with intelligent conversations.</p>
+            <p>&copy; 2024 Shree AI. Revolutionizing recruitment with intelligent conversations.</p>
           </div>
         </div>
       </footer>

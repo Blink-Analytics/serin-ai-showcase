@@ -1,5 +1,6 @@
 import { FloatingNavDemo } from "@/components/FloatingNavDemo";
 import AnimatedGradientBackground from "@/components/ui/animated-gradient-background";
+import { Footer } from "@/components/ui/footer-section-new";
 import { GRADIENT_COLORS, ANIMATION_CONFIG } from "@/lib/gradient-constants";
 import { Brain, MessageCircle, BarChart3, Shield, Zap, Users } from "lucide-react";
 
@@ -65,7 +66,7 @@ const Features = () => {
               Features
             </h1>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto font-arimo">
-              Discover the powerful capabilities that make Serin the most advanced 
+              Discover the powerful capabilities that make Shree the most advanced 
               AI interview agent in the market.
             </p>
           </div>
@@ -95,7 +96,7 @@ const Features = () => {
                 Ready to Transform Your Hiring?
               </h2>
               <p className="text-xl text-gray-300 mb-8 font-arimo">
-                Join thousands of companies already using Serin to make better hiring decisions.
+                Join thousands of companies already using Shree to make better hiring decisions.
               </p>
               <button className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all duration-200 font-arimo">
                 Get Started Today
@@ -104,6 +105,9 @@ const Features = () => {
           </div>
         </div>
       </div>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };

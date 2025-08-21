@@ -6,13 +6,15 @@ interface MultiLayeredOrbProps {
   audioIntensity?: number;
   pulseActive?: boolean;
   animationPhase?: 'loading' | 'textSync' | 'idle';
+  isSpeaking?: boolean;
 }
 
 export const MultiLayeredOrb: FC<MultiLayeredOrbProps> = ({
   isTextAnimating = false,
-  audioIntensity = 0.5,
+  audioIntensity = 0,
   pulseActive = false,
   animationPhase = 'idle',
+  isSpeaking = false,
 }) => {
   const ctnDom = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -220,8 +222,8 @@ export const MultiLayeredOrb: FC<MultiLayeredOrbProps> = ({
 
   // Tightly knit orb layer configurations
   const orbLayers = [
-    { layer: 0.0, offset: [0.0, 0.0], scale: 1.0, rotationSpeed: -0.2, opacity: 0.9 },
-    { layer: 0.5, offset: [0.005, -0.005], scale: 0.95, rotationSpeed: 0.3, opacity: 0.7 }
+    { layer: 0.0, offset: [0.0, 0.0], scale: 1.0, rotationSpeed: -0.1, opacity: 0.9 }, // Slower rotation for idle
+    { layer: 0.5, offset: [0.005, -0.005], scale: 0.95, rotationSpeed: 0.15, opacity: 0.7 } // Slower rotation for idle
   ];
 
   useEffect(() => {
@@ -339,53 +341,72 @@ export const MultiLayeredOrb: FC<MultiLayeredOrbProps> = ({
           lastTime = t;
           program.uniforms.iTime.value = t * 0.001;
 
-          // Load progress animation
-          const loadProgress = Math.min((Date.now() - loadStartTime) / 2000, 1);
+          // Load progress animation - simplified
+          const loadProgress = Math.min((Date.now() - loadStartTime) / 1500, 1); // Faster load
           program.uniforms.loadProgress.value = loadProgress;
           
           if (loadProgress >= 1 && !isLoaded && index === 0) {
             setIsLoaded(true);
           }
 
-          // Enhanced hover smoothing with natural easing
-          const hoverEasing = 1 - Math.pow(1 - 0.08, dt * 60); // Frame rate independent
-          program.uniforms.hover.value += (targetHover - program.uniforms.hover.value) * hoverEasing;
+          // Optimized hover transitions
+          program.uniforms.hover.value += (targetHover - program.uniforms.hover.value) * 0.1;
 
-          // Enhanced phase-based audio reaction animation with ultra-smooth transitions
-          const audioScale = window.innerWidth < 768 ? 0.5 : 1.0; // Mobile scaling
-          
-          let targetIntensity = 0;
-          let smoothingFactor = 0.08;
+          // Dynamic rotation speed based on animation phase and interactions
+          let targetRotationSpeed = config.rotationSpeed;
+          const hasInteraction = program.uniforms.hover.value > 0.01 || audioIntensity > 0.1 || isSpeaking;
           
           switch (animationPhase) {
-            case 'loading':
-              // Gentle, slow breathing during loading with extended smoothing
-              const loadingBreath = Math.sin(t * 0.0012) * 0.06; // Slower, gentler
-              targetIntensity = 0.10 + loadingBreath;
-              smoothingFactor = 0.015; // Ultra-slow for maximum smoothness
+            case 'idle':
+              targetRotationSpeed = hasInteraction ? config.rotationSpeed * 1.5 : config.rotationSpeed;
               break;
             case 'textSync':
-              // Enhanced synchronized wave animation with natural breathing
-              const waveBase = pulseActive ? 0.22 : 0.0;
-              const primaryWave = Math.sin(t * 0.002) * 0.12; // Slower, more natural wave
-              const secondaryBreath = Math.sin(t * 0.0008) * 0.03; // Subtle breathing overlay
-              const naturalWavePattern = waveBase + primaryWave + secondaryBreath;
-              targetIntensity = (audioIntensity * audioScale * 0.35) + naturalWavePattern;
-              smoothingFactor = 0.04; // Smoother transitions for text sync
+              targetRotationSpeed = config.rotationSpeed * 2.0; // Faster during speaking
               break;
-            case 'idle':
-            default:
-              // Extended ambient breathing with natural rhythm
-              const ambientBreath = Math.sin(t * 0.0006) * 0.02; // Slower breathing
-              const subtleVariation = Math.sin(t * 0.0003) * 0.01; // Ultra-subtle variation
-              targetIntensity = 0.035 + ambientBreath + subtleVariation;
-              smoothingFactor = 0.02; // Extended transition to idle
+            case 'loading':
+              targetRotationSpeed = config.rotationSpeed * 0.8; // Slightly slower during loading
               break;
           }
           
-          // Enhanced smoothing with exponential easing for more natural motion
-          const easingFactor = 1 - Math.pow(1 - smoothingFactor, dt * 60); // Frame rate independent
-          program.uniforms.audioReaction.value += (targetIntensity - program.uniforms.audioReaction.value) * easingFactor;
+          // Smooth rotation speed transition
+          program.uniforms.rotationSpeed.value += (targetRotationSpeed - program.uniforms.rotationSpeed.value) * 0.05;
+
+          // Unified smooth animation - minimal computation for 60fps
+          const audioScale = window.innerWidth < 768 ? 0.5 : 1.0;
+          
+          let targetIntensity = 0;
+          const smoothingFactor = 0.06; // Consistent smooth factor
+          
+          switch (animationPhase) {
+            case 'loading':
+              // Steady glow during orb scaling - reduced intensity
+              targetIntensity = audioIntensity * audioScale * 0.3;
+              break;
+            case 'textSync':
+              // More controlled animation during text - reduced pulsing
+              const wave = Math.sin(t * 0.0008) * 0.05; // Reduced wave intensity
+              const pulse = pulseActive ? Math.sin(t * 0.001) * 0.03 : 0; // Reduced pulse intensity
+              targetIntensity = (audioIntensity * audioScale * 0.4) + wave + pulse;
+              break;
+            case 'idle':
+            default:
+              // Simple revolving motion with minimal variation - only pulse on hover
+              const hasHover = program.uniforms.hover.value > 0.01;
+              
+              if (hasHover) {
+                // Gentle pulse only when hovering/interacting
+                const hoverPulse = Math.sin(t * 0.002) * 0.08;
+                const gentle = Math.sin(t * 0.0005 + index * 0.5) * 0.01;
+                targetIntensity = hoverPulse + gentle;
+              } else {
+                // Very minimal baseline activity - just gentle rotation
+                targetIntensity = Math.sin(t * 0.0003 + index * 0.5) * 0.005; // Very subtle
+              }
+              break;
+          }
+          
+          // Unified smooth transition
+          program.uniforms.audioReaction.value += (targetIntensity - program.uniforms.audioReaction.value) * smoothingFactor;
 
           if (rendererInstance) {
             rendererInstance.render({ scene: mesh });

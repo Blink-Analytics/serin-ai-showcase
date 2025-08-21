@@ -149,7 +149,7 @@ const Hero = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-blue-400/40 via-red-500/50 to-violet-600/40 blur-3xl scale-150 -z-10" />
             </div>
             
-            {/* Second line: "I'm Serin" */}
+            {/* Second line: "I'm Shree" */}
             <div className="relative">
               <div className="flex items-baseline justify-center gap-4">
                 <TextEffect
@@ -213,7 +213,7 @@ const Hero = () => {
                 </TextEffect>
                 
                 <TextEffect
-                  key={`serin-${animationKey}`}
+                  key={`shree-${animationKey}`}
                   as="span"
                   per="char"
                   delay={0.8}
@@ -269,10 +269,10 @@ const Hero = () => {
                     },
                   }}
                 >
-                  Serin
+                  Shree
                 </TextEffect>
               </div>
-              {/* Enhanced glow effect behind "I'm Serin" */}
+              {/* Enhanced glow effect behind "I'm Shree" */}
               <div className="absolute inset-0 bg-gradient-to-r from-violet-500/30 via-red-500/40 to-blue-500/30 blur-3xl scale-130 -z-10" />
             </div>
           </div>

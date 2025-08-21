@@ -2,7 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Serin AI Design System - Deep blacks with electric blues and violet accents */
+/* Shree AI Design System - Deep blacks with electric blues and violet accents */
+
+/* Prevent over-scrolling and ensure smooth scrolling */
+html, body {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+/* Main page container scroll constraints */
+.page-container {
+  max-height: 100vh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+}
+
+.page-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.page-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.page-container::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.3);
+  border-radius: 3px;
+}
+
+.page-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.5);
+}
 
 @layer base {
   :root {
@@ -58,6 +88,13 @@
     /* Animation properties */
     --breathing-duration: 6s;
     --fade-duration: 0.8s;
+
+    /* Gradient Text Colors - Red to Violet theme matching site */
+    --color-1: 0 100% 50%; /* Bright Red */
+    --color-2: 315 100% 60%; /* Pink-Red */
+    --color-3: 270 100% 70%; /* Electric Purple */
+    --color-4: 280 100% 80%; /* Light Violet */
+    --color-5: 285 100% 65%; /* Medium Purple */
     --slide-duration: 1.2s;
 
     --sidebar-background: 0 0% 98%;
@@ -111,41 +148,57 @@
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 240 3.7% 15.9%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
+    
+    /* Gradient colors for dark mode */
+    --color-1: 0 100% 50%;      /* Bright Red */
+    --color-2: 315 100% 60%;    /* Pink-Red */
+    --color-3: 270 100% 70%;    /* Electric Purple */
+    --color-4: 260 100% 75%;    /* Light Violet */
+    --color-5: 285 100% 65%;    /* Medium Purple */
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-
   body {
-    @apply bg-background text-foreground;
+    @apply bg-black text-white;
     overflow-x: hidden;
   }
 }
 
-/* Serin AI Custom Animations & Components */
+/* Shree AI Custom Animations & Components */
 @layer components {
-  /* Animated gradient background */
+  /* Seamless gradient background - optimized for hero to footer flow */
   .gradient-bg {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
-    background: radial-gradient(
-      ellipse at center,
-      hsl(var(--gradient-start)) 0%,
-      hsl(var(--gradient-mid-1)) 25%,
-      hsl(var(--gradient-mid-2)) 50%,
-      hsl(var(--gradient-mid-3)) 75%,
-      hsl(var(--gradient-end)) 100%
+    height: 200vh; /* Reduced from 500vh for hero-to-footer flow */
+    background: linear-gradient(
+      180deg,
+      /* Hero section gradient */
+      hsl(220 50% 2%) 0%,
+      hsl(240 80% 8%) 10%,
+      hsl(260 90% 15%) 25%,
+      /* Smooth transition zone */
+      hsl(270 95% 20%) 40%,
+      hsl(260 90% 18%) 60%,
+      /* Footer preparation */
+      hsl(240 80% 12%) 80%,
+      hsl(220 50% 4%) 95%,
+      hsl(220 50% 2%) 100%
     );
-    animation: breathe var(--breathing-duration) ease-in-out infinite;
+    animation: heroToFooterFlow 15s ease-in-out infinite;
     z-index: -1;
+  }
+  
+  /* Seamless page container - optimized for shorter content */
+  .seamless-container {
+    position: relative;
+    background: transparent;
+    min-height: 200vh; /* Reduced for hero-to-footer layout */
   }
 
   /* Hero text animations - Enhanced for center of attraction */
@@ -220,8 +273,8 @@
 
   /* Feature cards */
   .feature-card {
-    @apply bg-card/80 backdrop-blur-xl border border-border rounded-2xl p-8;
-    @apply hover:bg-card/90 transition-all duration-500;
+    @apply bg-black/80 backdrop-blur-xl border border-white/20 rounded-2xl p-8;
+    @apply hover:bg-black/90 transition-all duration-500;
     @apply hover:scale-105 hover:shadow-2xl;
     box-shadow: 0 0 40px hsl(var(--primary) / 0.1);
   }
@@ -245,6 +298,25 @@
   50% {
     transform: scale(1.1) rotate(1deg);
     opacity: 1;
+  }
+}
+
+@keyframes heroToFooterFlow {
+  0%, 100% {
+    background-position: 0% 0%;
+    transform: translateY(0px) scale(1);
+  }
+  25% {
+    background-position: 10% 5%;
+    transform: translateY(-30px) scale(1.02);
+  }
+  50% {
+    background-position: 20% 10%;
+    transform: translateY(-60px) scale(1.04);
+  }
+  75% {
+    background-position: 10% 5%;
+    transform: translateY(-30px) scale(1.02);
   }
 }
 
@@ -273,4 +345,91 @@
   50% {
     transform: translateY(-20px);
   }
+}
+
+/* Custom Font Classes for Google Fonts */
+.playwrite-au-qld {
+  font-family: "Playwrite AU QLD", cursive !important;
+  font-optical-sizing: auto !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  font-feature-settings: "liga" 1, "clig" 1, "kern" 1, "calt" 1 !important;
+  font-variant-ligatures: common-ligatures contextual !important;
+  text-rendering: optimizeLegibility !important;
+}
+
+.playwrite-au-qld-light {
+  font-family: "Playwrite AU QLD", cursive !important;
+  font-optical-sizing: auto !important;
+  font-weight: 200 !important;
+  font-style: normal !important;
+  font-feature-settings: "liga" 1, "clig" 1, "kern" 1, "calt" 1 !important;
+  font-variant-ligatures: common-ligatures contextual !important;
+  text-rendering: optimizeLegibility !important;
+}
+
+.playwrite-au-qld-regular {
+  font-family: "Playwrite AU QLD", cursive !important;
+  font-optical-sizing: auto !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  font-feature-settings: "liga" 1, "clig" 1, "kern" 1, "calt" 1 !important;
+  font-variant-ligatures: common-ligatures contextual !important;
+  text-rendering: optimizeLegibility !important;
+}
+
+.dancing-script {
+  font-family: "Dancing Script", cursive !important;
+  font-weight: 700 !important;
+  font-style: normal !important;
+  font-feature-settings: "liga" 1, "clig" 1, "kern" 1, "calt" 1 !important;
+  font-variant-ligatures: common-ligatures contextual !important;
+  text-rendering: optimizeLegibility !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* Specific targeting for Hello text - ensure cursive font applies to all characters */
+.playwrite-au-qld h1,
+.playwrite-au-qld h1 *,
+.playwrite-au-qld span:not(.font-arimo):not([class*="font-arimo"]),
+.playwrite-au-qld span:not(.font-arimo):not([class*="font-arimo"]) * {
+  font-family: "Playwrite AU QLD", cursive !important;
+  font-optical-sizing: auto !important;
+  font-feature-settings: "liga" 1, "clig" 1, "kern" 1, "calt" 1 !important;
+  font-variant-ligatures: common-ligatures contextual !important;
+  text-rendering: optimizeLegibility !important;
+}
+
+/* Ensure Arimo font stays for Shree text */
+.font-arimo,
+.font-arimo *,
+[class*="font-arimo"],
+[class*="font-arimo"] * {
+  font-family: "Arimo", sans-serif !important;
+}
+
+/* Override any Tailwind font utilities for playwrite */
+.playwrite-au-qld[class*="font-"]:not([class*="font-arimo"]) {
+  font-family: "Playwrite AU QLD", cursive !important;
+}
+
+/* Target specific text effect elements for Hello and I'm only */
+[data-text="hello-text"],
+[data-text="im-text"],
+h1[data-text="hello-text"] *,
+span[data-text="im-text"] * {
+  font-family: "Playwrite AU QLD", cursive !important;
+}
+
+/* Force cursive font on individual characters within playwrite containers */
+.playwrite-au-qld span[style],
+.playwrite-au-qld span[style] *,
+.playwrite-au-qld motion-span,
+.playwrite-au-qld motion-span *,
+.playwrite-au-qld [data-motion-component],
+.playwrite-au-qld [data-motion-component] * {
+  font-family: "Playwrite AU QLD", cursive !important;
+  font-feature-settings: "liga" 1, "clig" 1, "kern" 1, "calt" 1 !important;
+  font-variant-ligatures: common-ligatures contextual !important;
+  text-rendering: optimizeLegibility !important;
 }

@@ -1,5 +1,6 @@
 import { FloatingNavDemo } from "@/components/FloatingNavDemo";
 import AnimatedGradientBackground from "@/components/ui/animated-gradient-background";
+import { Footer } from "@/components/ui/footer-section-new";
 import { GRADIENT_COLORS, ANIMATION_CONFIG } from "@/lib/gradient-constants";
 
 const About = () => {
@@ -21,12 +22,12 @@ const About = () => {
       <div className="relative z-10 pt-32 pb-20 px-8">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-white mb-8 font-arimo">
-            About Serin
+            About Shree
           </h1>
           
           <div className="space-y-8 text-lg text-gray-300 font-arimo leading-relaxed">
             <p>
-              Serin is a revolutionary AI interview agent that transforms the hiring process 
+              Shree is a revolutionary AI interview agent that transforms the hiring process 
               through intelligent conversations and deep candidate insights. Built with 
               cutting-edge natural language processing and machine learning technologies.
             </p>
@@ -73,6 +74,9 @@ const About = () => {
           </div>
         </div>
       </div>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };

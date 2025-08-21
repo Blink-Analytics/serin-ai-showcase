@@ -13,7 +13,7 @@ const AudioSyncedHero = () => {
 
   // Audio sync configuration
   const audioSync = useAudioSync({
-    audioUrl: '/audio/hello-im-serin.mp3', // You'll need to add this audio file
+    audioUrl: '/audio/hello-im-shree.mp3', // You'll need to add this audio file
     fallbackMode: true, // Enable fallback mode if audio file not found
     animationTimings: {
       hello: {
@@ -24,8 +24,8 @@ const AudioSyncedHero = () => {
         start: 1800, // Start "I'm" at 1.8s
         duration: 800,
       },
-      serin: {
-        start: 2700, // Start "Serin" at 2.7s
+      shree: {
+        start: 2700, // Start "Shree" at 2.7s
         duration: 1200,
       },
     },
@@ -187,7 +187,7 @@ const AudioSyncedHero = () => {
             <div className={`absolute inset-0 bg-gradient-to-r ${GRADIENT_COLORS.GLOW.BLUE} blur-3xl scale-150 -z-10 opacity-60`} />
           </div>
           
-          {/* Second line: "I'm Serin" */}
+          {/* Second line: "I'm Shree" */}
           <div className="relative pb-4">
             <div className="flex items-baseline gap-4">
               <TextEffect
@@ -251,11 +251,11 @@ const AudioSyncedHero = () => {
               </TextEffect>
               
               <TextEffect
-                key={`serin-${animationKey}`}
+                key={`shree-${animationKey}`}
                 as="span"
                 per="char"
                 delay={0}
-                trigger={audioSync.showSerin}
+                trigger={audioSync.showShree}
                 className="text-9xl md:text-[10rem] lg:text-[12rem] font-black tracking-tighter drop-shadow-[0_0_25px_rgba(138,43,226,0.8)] font-arimo leading-[1.05]"
                 preset="gradient"
                 variants={{
@@ -307,10 +307,10 @@ const AudioSyncedHero = () => {
                   },
                 }}
               >
-                Serin
+                Shree
               </TextEffect>
             </div>
-            {/* Enhanced glow effect behind "I'm Serin" */}
+            {/* Enhanced glow effect behind "I'm Shree" */}
             <div className={`absolute inset-0 bg-gradient-to-r ${GRADIENT_COLORS.GLOW.ENHANCED} blur-3xl scale-130 -z-10 opacity-50`} />
           </div>
         </div>

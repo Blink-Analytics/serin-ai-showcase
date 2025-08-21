@@ -1,5 +1,6 @@
 "use client"
 import AnimatedGradientBackground from "@/components/ui/animated-gradient-background";
+import { Footer } from '@/components/ui/footer-section-new';
 import { motion } from "framer-motion";
 
 const DemoVariant1 = () => {
@@ -43,8 +44,23 @@ const DemoVariant1 = () => {
           </motion.div>
         </motion.div>
       </div>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   );
 };
+
+// Demo for Footer component
+export function DemoOne() {
+	return (
+		<div className="relative flex min-h-svh flex-col bg-black">
+			<div className="min-h-screen flex items-center justify-center">
+				<h1 className='font-mono text-2xl font-bold text-white'>Scroll Down!</h1>
+			</div>
+			<Footer />
+		</div>
+	);
+}
 
 export { DemoVariant1 };
