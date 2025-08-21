@@ -223,8 +223,8 @@ const PostSignupDashboard = () => {
       {/* Animated Background - consistent with theme */}
       <AnimatedGradientBackground />
       
-      {/* Navigation - always visible */}
-      <FloatingNavDemo alwaysVisible={true} />
+      {/* Navigation - always visible with organization selector */}
+      <FloatingNavDemo alwaysVisible={true} showOrgSelector={true} />
       
       {/* Content with proper spacing and responsive design */}
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-start px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 md:pt-32 pb-12">

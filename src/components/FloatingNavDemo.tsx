@@ -2,9 +2,10 @@
 
 import React from "react";
 import { FloatingNav } from "@/components/ui/floating-navbar";
+import { OrganizationSelector } from "@/components/OrganizationSelector";
 import { Home, MessageSquare, User, Briefcase, Sparkles } from "lucide-react";
 
-export function FloatingNavDemo({ waitForIntro = false, alwaysVisible = false }: { waitForIntro?: boolean; alwaysVisible?: boolean }) {
+export function FloatingNavDemo({ waitForIntro = false, alwaysVisible = false, showOrgSelector = false }: { waitForIntro?: boolean; alwaysVisible?: boolean; showOrgSelector?: boolean }) {
   const navItems = [
     {
       name: "Home",
@@ -35,7 +36,7 @@ export function FloatingNavDemo({ waitForIntro = false, alwaysVisible = false }:
 
   return (
     <div className="relative w-full">
-      <FloatingNav navItems={navItems} waitForIntro={waitForIntro} alwaysVisible={alwaysVisible} />
+      <FloatingNav navItems={navItems} waitForIntro={waitForIntro} alwaysVisible={alwaysVisible} showOrgSelector={showOrgSelector} />
     </div>
   );
 }

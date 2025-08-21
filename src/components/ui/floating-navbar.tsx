@@ -9,12 +9,14 @@ import {
 import { cn } from "@/lib/utils";
 import { useLocation } from "react-router-dom";
 import { useNavTransition } from "@/hooks/useNavTransition";
+import { OrganizationSelector } from "@/components/OrganizationSelector";
 
 export const FloatingNav = ({
   navItems,
   className,
   waitForIntro = false,
   alwaysVisible = false,
+  showOrgSelector = false,
 }: {
   navItems: {
     name: string;
@@ -24,6 +26,7 @@ export const FloatingNav = ({
   className?: string;
   waitForIntro?: boolean;
   alwaysVisible?: boolean;
+  showOrgSelector?: boolean;
 }) => {
   const { scrollYProgress } = useScroll();
   const location = useLocation();
@@ -92,10 +95,20 @@ export const FloatingNav = ({
           ease: "easeInOut",
         }}
         className={cn(
-          "flex max-w-fit fixed top-10 inset-x-0 mx-auto border border-white/10 rounded-full bg-black/40 backdrop-blur-xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.3),0px_1px_0px_0px_rgba(25,28,33,0.1),0px_0px_0px_1px_rgba(25,28,33,0.2)] z-[5000] pr-2 pl-8 py-2 items-center justify-center space-x-4",
+          "flex max-w-fit fixed top-10 inset-x-0 mx-auto border border-white/10 rounded-full bg-black/40 backdrop-blur-xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.3),0px_1px_0px_0px_rgba(25,28,33,0.1),0px_0px_0px_1px_rgba(25,28,33,0.2)] z-[5000] pr-2 py-2 items-center justify-center space-x-4",
+          showOrgSelector ? "pl-4" : "pl-8",
           className
         )}
       >
+        {/* Organization Selector - Left side */}
+        {showOrgSelector && (
+          <div className="mr-4">
+            <OrganizationSelector />
+          </div>
+        )}
+        
+        {/* Navigation Items */}
+        <div className="flex items-center space-x-4">
         {navItems.map((navItem: any, idx: number) => {
           const isActive = location.pathname === navItem.link;
           
@@ -106,7 +119,7 @@ export const FloatingNav = ({
               className={cn(
                 "relative items-center flex space-x-1 transition-all duration-300 px-3 py-2 rounded-full",
                 isActive 
-                  ? "text-white bg-white/10 shadow-lg" 
+                  ? "text-white bg-black/30 backdrop-blur-md border border-white/20 shadow-lg shadow-blue-500/20" 
                   : "text-gray-300 hover:text-white hover:bg-white/5",
                 isNavigating && "opacity-50 cursor-not-allowed"
               )}
@@ -117,11 +130,11 @@ export const FloatingNav = ({
               <span className="block sm:hidden">{navItem.icon}</span>
               <span className="hidden sm:block text-sm font-arimo font-medium">{navItem.name}</span>
               
-              {/* Active indicator */}
+              {/* Active indicator - frosted gradient */}
               {isActive && (
                 <motion.div
                   layoutId="activeTab"
-                  className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-blue-500/20 rounded-full border border-purple-400/30"
+                  className="absolute inset-0 bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-blue-500/30 rounded-full border border-white/30 backdrop-blur-md shadow-inner"
                   initial={false}
                   transition={{
                     type: "spring",
@@ -140,8 +153,11 @@ export const FloatingNav = ({
             </motion.button>
           );
         })}
+        </div>
+        
+        {/* Login Button */}
         <motion.button 
-          className="border text-sm font-medium relative border-white/20 text-white px-4 py-2 rounded-full hover:bg-white/10 transition-all duration-300 font-arimo"
+          className="border text-sm font-medium relative border-white/20 text-white px-4 py-2 rounded-full hover:bg-black/30 hover:backdrop-blur-md hover:border-white/30 transition-all duration-300 font-arimo"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => navigateWithTransition("/login")}

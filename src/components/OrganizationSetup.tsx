@@ -10,6 +10,32 @@ interface OrganizationChoiceProps {
   onBack?: () => void;
 }
 
+// Data variables for easy backend integration
+const ORGANIZATION_CHOICE_DATA = {
+  header: {
+    title: "Organization Setup",
+    subtitle: "Choose how to set up your organization",
+    icon: Building
+  },
+  choices: [
+    {
+      id: "create",
+      icon: Plus,
+      title: "Create New Organization",
+      description: "Start fresh with a new organization"
+    },
+    {
+      id: "join", 
+      icon: Key,
+      title: "Join Existing Organization",
+      description: "Use an invitation code to join"
+    }
+  ],
+  footer: {
+    text: "You can manage organization settings later from your dashboard"
+  }
+};
+
 export function OrganizationChoice({ onChoice, onBack }: OrganizationChoiceProps) {
   return (
     <div className="w-full max-w-md mx-auto">
@@ -26,35 +52,31 @@ export function OrganizationChoice({ onChoice, onBack }: OrganizationChoiceProps
         )}
 
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 mt-8">
           <div className="w-16 h-16 rounded-2xl bg-blue-500/20 flex items-center justify-center border border-blue-400/30 mx-auto mb-4">
-            <Building className="w-8 h-8 text-blue-300" />
+            <ORGANIZATION_CHOICE_DATA.header.icon className="w-8 h-8 text-blue-300" />
           </div>
-          <h1 className="text-3xl font-normal text-white mb-2">Organization Setup</h1>
-          <p className="text-white/60 text-base">Choose how to set up your organization</p>
+          <h1 className="text-3xl font-normal text-white mb-2">{ORGANIZATION_CHOICE_DATA.header.title}</h1>
+          <p className="text-white/60 text-base">{ORGANIZATION_CHOICE_DATA.header.subtitle}</p>
         </div>
 
         {/* Choice Buttons */}
         <div className="space-y-4">
-          <ChoiceButton
-            onClick={() => onChoice("create")}
-            icon={Plus}
-            title="Create New Organization"
-            description="Start fresh with a new organization"
-          />
-
-          <ChoiceButton
-            onClick={() => onChoice("join")}
-            icon={Key}
-            title="Join Existing Organization"
-            description="Use an invitation code to join"
-          />
+          {ORGANIZATION_CHOICE_DATA.choices.map((choice) => (
+            <ChoiceButton
+              key={choice.id}
+              onClick={() => onChoice(choice.id as "create" | "join")}
+              icon={choice.icon}
+              title={choice.title}
+              description={choice.description}
+            />
+          ))}
         </div>
 
         {/* Footer */}
         <div className="text-center mt-8">
           <p className="text-white/40 text-sm">
-            You can manage organization settings later from your dashboard
+            {ORGANIZATION_CHOICE_DATA.footer.text}
           </p>
         </div>
       </div>

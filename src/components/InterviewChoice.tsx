@@ -7,6 +7,31 @@ interface InterviewChoiceProps {
   onBack?: () => void;
 }
 
+// Data variables for easy backend integration
+const INTERVIEW_CHOICE_DATA = {
+  header: {
+    title: "Welcome to AI Interview Platform",
+    subtitle: "Choose how you'd like to get started"
+  },
+  choices: [
+    {
+      id: "create",
+      icon: Users,
+      title: "Create Interview",
+      description: "Set up interviews for candidates"
+    },
+    {
+      id: "join",
+      icon: UserCheck,
+      title: "Give Interview", 
+      description: "Join an interview session"
+    }
+  ],
+  footer: {
+    text: "You can switch between roles anytime from your dashboard"
+  }
+};
+
 export function InterviewChoice({ onChoice, onBack }: InterviewChoiceProps) {
   return (
     <div className="w-full mx-auto">
@@ -23,32 +48,28 @@ export function InterviewChoice({ onChoice, onBack }: InterviewChoiceProps) {
         )}
 
         {/* Header - responsive text sizes */}
-        <div className="text-center mb-6 sm:mb-8">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-normal text-white mb-3 sm:mb-4 leading-tight">Welcome to AI Interview Platform</h1>
-          <p className="text-white/60 text-sm sm:text-base leading-relaxed">Choose how you'd like to get started</p>
+        <div className="text-center mb-6 sm:mb-8 mt-8 sm:mt-12">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-normal text-white mb-3 sm:mb-4 leading-tight">{INTERVIEW_CHOICE_DATA.header.title}</h1>
+          <p className="text-white/60 text-sm sm:text-base leading-relaxed">{INTERVIEW_CHOICE_DATA.header.subtitle}</p>
         </div>
 
         {/* Choice Buttons - responsive spacing */}
         <div className="space-y-3 sm:space-y-4">
-          <ChoiceButton
-            onClick={() => onChoice("create")}
-            icon={Users}
-            title="Create Interview"
-            description="Set up interviews for candidates"
-          />
-
-          <ChoiceButton
-            onClick={() => onChoice("join")}
-            icon={UserCheck}
-            title="Give Interview"
-            description="Join an interview session"
-          />
+          {INTERVIEW_CHOICE_DATA.choices.map((choice) => (
+            <ChoiceButton
+              key={choice.id}
+              onClick={() => onChoice(choice.id as "create" | "join")}
+              icon={choice.icon}
+              title={choice.title}
+              description={choice.description}
+            />
+          ))}
         </div>
 
         {/* Footer - responsive text size */}
         <div className="text-center mt-6 sm:mt-8">
           <p className="text-white/40 text-xs sm:text-sm leading-relaxed">
-            You can switch between roles anytime from your dashboard
+            {INTERVIEW_CHOICE_DATA.footer.text}
           </p>
         </div>
       </div>
