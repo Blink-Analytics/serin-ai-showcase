@@ -180,30 +180,37 @@ export const Component: FC<ComponentProps> = ({
     if (!container) return;
 
     let rendererInstance: Renderer | null = null;
-    let glContext: WebGLRenderingContext | WebGL2RenderingContext | null = null;
     let rafId: number;
     
     try {
-        rendererInstance = new Renderer({ alpha: true, premultipliedAlpha: false, antialias: true, dpr: window.devicePixelRatio || 1 });
-        glContext = rendererInstance.gl;
-        glContext.clearColor(0, 0, 0, 0);
+        // Create OGL renderer which manages the context properly
+        rendererInstance = new Renderer({ 
+            alpha: true, 
+            premultipliedAlpha: false, 
+            antialias: true, 
+            dpr: window.devicePixelRatio || 1 
+        });
         
+        const gl = rendererInstance.gl; // This is the properly typed OGL context
+        gl.clearColor(0, 0, 0, 0);
+        
+        // Remove existing content and add canvas
         if (container.firstChild) {
             container.removeChild(container.firstChild);
         }
-        container.appendChild(glContext.canvas);
+        container.appendChild(gl.canvas as HTMLCanvasElement);
 
-        const geometry = new Triangle(glContext);
-        const program = new Program(glContext, {
+        const geometry = new Triangle(gl);
+        const program = new Program(gl, {
         vertex: vert,
         fragment: frag,
         uniforms: {
             iTime: { value: 0 },
             iResolution: {
             value: new Vec3(
-                glContext.canvas.width,
-                glContext.canvas.height,
-                glContext.canvas.width / glContext.canvas.height
+                gl.canvas.width,
+                gl.canvas.height,
+                gl.canvas.width / gl.canvas.height
             ),
             },
             hue: { value: hue },
@@ -213,25 +220,26 @@ export const Component: FC<ComponentProps> = ({
         },
         });
 
-        const mesh = new Mesh(glContext, { geometry, program });
+        const mesh = new Mesh(gl, { geometry, program });
 
         const resize = () => {
-            if (!container || !rendererInstance || !glContext) return;
-            const dpr = window.devicePixelRatio || 1; // Use actual DPR for sizing
+            if (!container || !rendererInstance) return;
+            const dpr = window.devicePixelRatio || 1;
             const width = container.clientWidth;
             const height = container.clientHeight;
 
             // Check if dimensions are valid before resizing
             if (width === 0 || height === 0) return;
 
-            rendererInstance.setSize(width * dpr, height * dpr); // Set renderer size with DPR
-            glContext.canvas.style.width = width + "px";
-            glContext.canvas.style.height = height + "px";
+            rendererInstance.setSize(width * dpr, height * dpr);
+            const canvas = gl.canvas as HTMLCanvasElement;
+            canvas.style.width = width + "px";
+            canvas.style.height = height + "px";
             
             program.uniforms.iResolution.value.set(
-                glContext.canvas.width, // Use drawing buffer width/height
-                glContext.canvas.height,
-                glContext.canvas.width / glContext.canvas.height
+                canvas.width,
+                canvas.height,
+                canvas.width / canvas.height
             );
         };
         window.addEventListener("resize", resize);
@@ -299,29 +307,26 @@ export const Component: FC<ComponentProps> = ({
           if (container) {
             container.removeEventListener("mousemove", handleMouseMove);
             container.removeEventListener("mouseleave", handleMouseLeave);
-            if (glContext && glContext.canvas && glContext.canvas.parentNode === container) {
-              container.removeChild(glContext.canvas);
+            const canvas = gl.canvas as HTMLCanvasElement;
+            if (canvas && canvas.parentNode === container) {
+              container.removeChild(canvas);
             }
           }
-          if (glContext) {
-            glContext.getExtension("WEBGL_lose_context")?.loseContext();
+          if (rendererInstance) {
+            rendererInstance.gl.getExtension("WEBGL_lose_context")?.loseContext();
           }
-          // OGL doesn't have explicit dispose methods for Program/Mesh/Geometry in same way as Three.js
-          // Losing context is the primary cleanup for WebGL resources managed by OGL
         };
 
     } catch (error) {
         console.error("Error initializing OGL Orb:", error);
-        if (container && container.firstChild) { // Clean up canvas if error occurred after append
+        if (container && container.firstChild) {
             container.removeChild(container.firstChild);
         }
-        return () => { // Basic cleanup if init fails early
-             window.removeEventListener("resize", () => {}); // Placeholder if resize wasn't set up
+        return () => {
+             window.removeEventListener("resize", () => {});
         };
     }
-
-
-  }, [hue, hoverIntensity, rotateOnHover, forceHoverState, vert, frag]); // Added vert and frag as they are part of program
+  }, [hue, hoverIntensity, rotateOnHover, forceHoverState]);
 
   return <div ref={ctnDom} className="w-full h-full" />;
 };

@@ -206,31 +206,38 @@ export const AudioReactiveOrb: FC<AudioReactiveOrbProps> = ({
     if (!container) return;
 
     let rendererInstance: Renderer | null = null;
-    let glContext: WebGLRenderingContext | WebGL2RenderingContext | null = null;
     let rafId: number;
     let loadStartTime = Date.now();
     
     try {
-        rendererInstance = new Renderer({ alpha: true, premultipliedAlpha: false, antialias: true, dpr: window.devicePixelRatio || 1 });
-        glContext = rendererInstance.gl;
-        glContext.clearColor(0, 0, 0, 0);
+        // Create OGL renderer which manages the context properly
+        rendererInstance = new Renderer({ 
+            alpha: true, 
+            premultipliedAlpha: false, 
+            antialias: true, 
+            dpr: window.devicePixelRatio || 1 
+        });
         
+        const gl = rendererInstance.gl; // This is the properly typed OGL context
+        gl.clearColor(0, 0, 0, 0);
+        
+        // Remove existing content and add canvas
         if (container.firstChild) {
             container.removeChild(container.firstChild);
         }
-        container.appendChild(glContext.canvas as HTMLCanvasElement);
+        container.appendChild(gl.canvas as HTMLCanvasElement);
 
-        const geometry = new Triangle(glContext);
-        const program = new Program(glContext, {
+        const geometry = new Triangle(gl);
+        const program = new Program(gl, {
         vertex: vert,
         fragment: frag,
         uniforms: {
             iTime: { value: 0 },
             iResolution: {
             value: new Vec3(
-                glContext.canvas.width,
-                glContext.canvas.height,
-                glContext.canvas.width / glContext.canvas.height
+                gl.canvas.width,
+                gl.canvas.height,
+                gl.canvas.width / gl.canvas.height
             ),
             },
             hue: { value: hue },
@@ -242,10 +249,10 @@ export const AudioReactiveOrb: FC<AudioReactiveOrbProps> = ({
         },
         });
 
-        const mesh = new Mesh(glContext, { geometry, program });
+        const mesh = new Mesh(gl, { geometry, program });
 
         const resize = () => {
-            if (!container || !rendererInstance || !glContext) return;
+            if (!container || !rendererInstance) return;
             const dpr = window.devicePixelRatio || 1;
             const width = container.clientWidth;
             const height = container.clientHeight;
@@ -253,13 +260,14 @@ export const AudioReactiveOrb: FC<AudioReactiveOrbProps> = ({
             if (width === 0 || height === 0) return;
 
             rendererInstance.setSize(width * dpr, height * dpr);
-            (glContext.canvas as HTMLCanvasElement).style.width = width + "px";
-            (glContext.canvas as HTMLCanvasElement).style.height = height + "px";
+            const canvas = gl.canvas as HTMLCanvasElement;
+            canvas.style.width = width + "px";
+            canvas.style.height = height + "px";
             
             program.uniforms.iResolution.value.set(
-                glContext.canvas.width,
-                glContext.canvas.height,
-                glContext.canvas.width / glContext.canvas.height
+                gl.canvas.width,
+                gl.canvas.height,
+                gl.canvas.width / gl.canvas.height
             );
         };
         window.addEventListener("resize", resize);
@@ -342,12 +350,13 @@ export const AudioReactiveOrb: FC<AudioReactiveOrbProps> = ({
           if (container) {
             container.removeEventListener("mousemove", handleMouseMove);
             container.removeEventListener("mouseleave", handleMouseLeave);
-            if (glContext && glContext.canvas && (glContext.canvas as HTMLCanvasElement).parentNode === container) {
-              container.removeChild(glContext.canvas as HTMLCanvasElement);
+            const canvas = gl.canvas as HTMLCanvasElement;
+            if (canvas && canvas.parentNode === container) {
+              container.removeChild(canvas);
             }
           }
-          if (glContext) {
-            glContext.getExtension("WEBGL_lose_context")?.loseContext();
+          if (rendererInstance) {
+            rendererInstance.gl.getExtension("WEBGL_lose_context")?.loseContext();
           }
         };
 

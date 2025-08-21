@@ -306,7 +306,8 @@ function InterviewAI() {
     console.log(`Using template: ${templateId}`)
   }
 
-  const handleTestInterview = () => {
+  const handleTestInterview = (templateId?: string) => {
+    console.log(`Testing interview${templateId ? ` with template: ${templateId}` : ''}`)
     setShowSystemCheck(true)
   }
 
