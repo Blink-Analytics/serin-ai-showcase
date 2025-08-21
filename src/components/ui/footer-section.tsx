@@ -1,18 +1,7 @@
 'use client';
 import React from 'react';
 import type { ComponentProps, ReactNode } from 'react';
-import { motion, us					</motion.div>
-
-				<div className="mt-10 grid grid-cols-2 gap-8 md:grid-cols-4 xl:col-span-2 xl:mt-0">
-					{footerLinks.map((section, index) => (
-						<motion.div 
-							key={section.label} 
-							className="mb-10 md:mb-0"
-							initial={{ opacity: 0, y: 30 }}
-							whileInView={{ opacity: 1, y: 0 }}
-							viewport={{ once: true, amount: 0.3 }}
-							transition={{ duration: 0.6, delay: 0.6 + index * 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-						>dMotion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { FacebookIcon, FrameIcon, InstagramIcon, LinkedinIcon, YoutubeIcon, GithubIcon, TwitterIcon } from 'lucide-react';
 
 interface FooterLink {
@@ -77,9 +66,7 @@ export function Footer() {
 				ease: [0.25, 0.1, 0.25, 1] 
 			}}
 		>
-			{/* Completely transparent - lets page gradient show through */}
-			
-			{/* Enhanced top border with animated gradient effect - more subtle */}
+			{/* Enhanced top border with animated gradient effect */}
 			<motion.div 
 				className="absolute top-0 right-1/2 left-1/2 h-px w-1/4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-transparent via-blue-400/30 to-transparent blur-sm"
 				initial={{ scaleX: 0, opacity: 0 }}
@@ -129,7 +116,7 @@ export function Footer() {
 					>
 						© {new Date().getFullYear()} Shree AI. All rights reserved.
 					</motion.p>
-				</AnimatedContainer>
+				</motion.div>
 
 				<div className="mt-10 grid grid-cols-2 gap-8 md:grid-cols-4 xl:col-span-2 xl:mt-0">
 					{footerLinks.map((section, index) => (

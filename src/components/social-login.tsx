@@ -7,9 +7,10 @@ import { Github, Mail } from "lucide-react"
 interface SocialLoginProps {
   onSocialLogin: (provider: string) => void
   type: "signin" | "signup"
+  isLoading?: boolean
 }
 
-export function SocialLogin({ onSocialLogin, type }: SocialLoginProps) {
+export function SocialLogin({ onSocialLogin, type, isLoading = false }: SocialLoginProps) {
   return (
     <div className="space-y-6">
       <div className="relative">

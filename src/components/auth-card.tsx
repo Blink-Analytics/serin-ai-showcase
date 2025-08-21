@@ -16,9 +16,7 @@ export function AuthCard({ onForgotPassword }: AuthCardProps) {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [rememberMe, setRememberMe] = useState(false)
-  const [firstName, setFirstName] = useState("John")
-  const [lastName, setLastName] = useState("")
-  const [phoneNumber, setPhoneNumber] = useState("(775) 351-6501")
+  // Removed name and phone fields for simplified signup
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
@@ -35,8 +33,7 @@ export function AuthCard({ onForgotPassword }: AuthCardProps) {
 
   const passwordsMatch = password === confirmPassword && confirmPassword !== "";
   const passwordStrength = getPasswordStrength(password);
-  const isFormValid = firstName.trim() && lastName.trim() && email.trim() && 
-                     password.length >= 6 && passwordsMatch;
+  const isFormValid = email.trim() && password.length >= 6 && passwordsMatch;
 
   const handleRedirect = () => {
     window.open("https://www.youtube.com/@diecastbydollarall", "_blank")
@@ -113,71 +110,28 @@ export function AuthCard({ onForgotPassword }: AuthCardProps) {
         </h1>
 
         <div className="relative">
-          <div
-            className={`transition-all duration-500 ease-in-out transform ${
-              activeTab === "signup" ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0 absolute inset-0"
-            }`}
-          >
-            {/* Sign Up Form */}
-            <form
-              onSubmit={handleSignup}
-              className="space-y-4"
+            <div
+              className={`transition-all duration-300 ease-in-out ${
+                activeTab === "signup" ? "block" : "hidden"
+              }`}
             >
-              {/* Name fields */}
-              <div className="grid grid-cols-2 gap-4">
+              {/* Sign Up Form */}
+              <form
+                onSubmit={handleSignup}
+                className="space-y-6"
+              >
+                {/* Email field */}
                 <div className="relative">
+                  <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/40 transition-colors duration-200" />
                   <Input
-                    type="text"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    className="bg-black/20 border border-white/10 rounded-2xl h-14 text-white placeholder:text-white/40 focus:border-white/50 focus:outline-none focus:ring-2 focus:ring-white/20 text-base transition-all duration-200 hover:bg-black/30 focus:bg-black/30"
-                    placeholder="First name"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="bg-black/20 border border-white/10 rounded-2xl h-14 text-white placeholder:text-white/40 focus:border-white/50 focus:outline-none focus:ring-2 focus:ring-white/20 pl-12 text-base transition-all duration-200 hover:bg-black/30 focus:bg-black/30"
+                    placeholder="Enter your email"
                     required
                   />
                 </div>
-                <div className="relative">
-                  <Input
-                    type="text"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    className="bg-black/20 border border-white/10 rounded-2xl h-14 text-white placeholder:text-white/40 focus:border-white/50 focus:outline-none focus:ring-2 focus:ring-white/20 text-base transition-all duration-200 hover:bg-black/30 focus:bg-black/30"
-                    placeholder="Last name"
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* Email field */}
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/40 transition-colors duration-200" />
-                <Input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="bg-black/20 border border-white/10 rounded-2xl h-14 text-white placeholder:text-white/40 focus:border-white/50 focus:outline-none focus:ring-2 focus:ring-white/20 pl-12 text-base transition-all duration-200 hover:bg-black/30 focus:bg-black/30"
-                  placeholder="Enter your email"
-                  required
-                />
-              </div>
-
-              {/* Phone field */}
-              <div className="relative">
-                <div className="absolute left-4 top-1/2 transform -translate-y-1/2 flex items-center gap-2">
-                  <div className="w-6 h-4 bg-red-500 relative overflow-hidden rounded-sm">
-                    <div className="absolute inset-0 bg-red-500"></div>
-                    <div className="absolute top-0 left-0 w-2 h-full bg-blue-600"></div>
-                    <div className="absolute top-1 left-1 w-1 h-0.5 bg-white"></div>
-                  </div>
-                  <ChevronDown className="w-4 h-4 text-white/40" />
-                </div>
-                <Input
-                  type="tel"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  className="bg-black/20 border border-white/10 rounded-2xl h-14 text-white placeholder:text-white/40 focus:border-white/50 focus:outline-none focus:ring-2 focus:ring-white/20 pl-20 text-base transition-all duration-200 hover:bg-black/30 focus:bg-black/30"
-                  placeholder="Phone number"
-                />
-              </div>
 
               {/* Password field */}
               <div className="relative">
@@ -279,8 +233,8 @@ export function AuthCard({ onForgotPassword }: AuthCardProps) {
           </div>
 
           <div
-            className={`transition-all duration-500 ease-in-out transform ${
-              activeTab === "signin" ? "translate-x-0 opacity-100" : "translate-x-full opacity-0 absolute inset-0"
+            className={`transition-all duration-300 ease-in-out ${
+              activeTab === "signin" ? "block" : "hidden"
             }`}
           >
             <form

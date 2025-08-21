@@ -18,8 +18,32 @@ export const TopNavbar = ({ onMenuClick }: TopNavbarProps) => {
   return (
     <header className="fixed top-0 lg:left-64 left-0 right-0 h-16 bg-white border-b border-gray-200 z-30">
       <div className="flex items-center justify-between h-full px-4 lg:px-6">
-        {/* Mobile menu button and search */}
+        {/* Left side - Organization dropdown, Mobile menu button and search */}
         <div className="flex items-center gap-4 flex-1">
+          {/* Organization Selector - moved to left */}
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg border border-gray-200">
+              <div className="w-8 h-8 bg-[#0ea5e9] rounded-full text-white text-xs flex items-center justify-center font-bold">
+                TC
+              </div>
+              <span className="hidden sm:block">TechCorp Inc.</span>
+              <ChevronDown className="w-4 h-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-48">
+              <DropdownMenuItem>
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 bg-[#0ea5e9] rounded-full text-white text-xs flex items-center justify-center font-bold">
+                    TC
+                  </div>
+                  <span>TechCorp Inc.</span>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Switch Organization</DropdownMenuItem>
+              <DropdownMenuItem>Create Organization</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           {/* Mobile menu button */}
           <button
             onClick={onMenuClick}
@@ -43,29 +67,6 @@ export const TopNavbar = ({ onMenuClick }: TopNavbarProps) => {
 
         {/* Right side - Notifications and User */}
         <div className="flex items-center gap-2 lg:gap-4">
-          {/* Organization Selector - hidden on small screens */}
-          <DropdownMenu>
-            <DropdownMenuTrigger className="hidden sm:flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg">
-              <div className="w-6 h-6 bg-[#0ea5e9] rounded text-white text-xs flex items-center justify-center font-bold">
-                TC
-              </div>
-              <span className="hidden lg:block">TechCorp Inc.</span>
-              <ChevronDown className="w-4 h-4" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem>
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 bg-[#0ea5e9] rounded text-white text-xs flex items-center justify-center font-bold">
-                    TC
-                  </div>
-                  <span>TechCorp Inc.</span>
-                </div>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Switch Organization</DropdownMenuItem>
-              <DropdownMenuItem>Create Organization</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
 
           {/* Notifications */}
           <button className="relative p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg">

@@ -73,9 +73,7 @@ export function PasswordStrength({ password }: PasswordStrengthProps) {
   )
 }
 
-export { getPasswordStrength } from "./password-strength"
-
-function getPasswordStrength(password: string) {
+export function getPasswordStrength(password: string) {
   let strength = 0
   const checks = {
     length: password.length >= 8,
