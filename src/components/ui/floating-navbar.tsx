@@ -16,7 +16,6 @@ export const FloatingNav = ({
   className,
   waitForIntro = false,
   alwaysVisible = false,
-  showOrgSelector = false,
 }: {
   navItems: {
     name: string;
@@ -26,7 +25,6 @@ export const FloatingNav = ({
   className?: string;
   waitForIntro?: boolean;
   alwaysVisible?: boolean;
-  showOrgSelector?: boolean;
 }) => {
   const { scrollYProgress } = useScroll();
   const location = useLocation();
@@ -95,17 +93,10 @@ export const FloatingNav = ({
           ease: "easeInOut",
         }}
         className={cn(
-          "flex max-w-fit fixed top-10 inset-x-0 mx-auto border border-white/10 rounded-full bg-black/40 backdrop-blur-xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.3),0px_1px_0px_0px_rgba(25,28,33,0.1),0px_0px_0px_1px_rgba(25,28,33,0.2)] z-[5000] pr-2 py-2 items-center justify-center space-x-4",
-          showOrgSelector ? "pl-4" : "pl-8",
+          "flex max-w-fit fixed top-10 inset-x-0 mx-auto border border-white/10 rounded-full bg-black/40 backdrop-blur-xl shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.3),0px_1px_0px_0px_rgba(25,28,33,0.1),0px_0px_0px_1px_rgba(25,28,33,0.2)] z-[5000] pr-2 py-2 items-center justify-center space-x-4 pl-8",
           className
         )}
       >
-        {/* Organization Selector - Left side */}
-        {showOrgSelector && (
-          <div className="mr-4">
-            <OrganizationSelector />
-          </div>
-        )}
         
         {/* Navigation Items */}
         <div className="flex items-center space-x-4">

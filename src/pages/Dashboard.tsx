@@ -13,10 +13,13 @@ const Dashboard = () => {
         {/* Dynamic Header */}
         <PageHeader
           title="AI Interview Dashboard"
-          subtitle="Manage job templates and analyze candidate performance"
+          subtitle="Here's an overview of your hiring performance this week"
           buttonText="New Template"
           buttonIcon={<Plus className="w-4 h-4" />}
           onButtonClick={() => console.log('Create new template')}
+          organizationName="TechCorp"
+          userName="Meet"
+          keyInsight="Candidate success rate is up 8% from last month"
         />
 
         {/* Metrics */}
