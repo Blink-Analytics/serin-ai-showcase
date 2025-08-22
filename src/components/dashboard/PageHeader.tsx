@@ -50,7 +50,7 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
       />
 
       {/* Header Content */}
-      <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 lg:gap-16 p-12 lg:p-16">
+      <div className="relative z-10 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 lg:gap-16 p-8 lg:p-10">
         {/* Left side - Text content */}
         <motion.div 
           className="flex-1 mt-16"
