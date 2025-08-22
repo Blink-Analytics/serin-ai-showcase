@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { PageHeader } from '@/components/dashboard/PageHeader';
-import { TrendingUp, Download, Filter, Calendar } from 'lucide-react';
+import { TrendingUp, Download, Filter, Calendar, Users, Target, Clock, Award, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 const analysisData = {
-  totalInterviews: 5,
-  passRate: '100%',
+  totalInterviews: 156,
+  passRate: 82,
   avgScore: 87,
-  avgDuration: '24m',
+  avgDuration: 24,
   thisMonth: 156,
   scoreDistribution: [
     { range: '9-10 (Excellent)', percentage: 34, count: 34, color: '#10b981' },
@@ -22,46 +23,121 @@ const analysisData = {
     { skill: 'Node.js', percentage: 65, color: '#3b82f6' },
     { skill: 'Python', percentage: 55, color: '#3b82f6' }
   ],
-  recentTrends: [
-    { text: 'Pass rate increased', change: '+5% from last month', icon: '📈', color: 'text-green-600' },
-    { text: 'Avg duration stable', change: '24m consistent', icon: '⏱️', color: 'text-blue-600' }
+  insights: [
+    "Pass rate improved 15% compared to last month.",
+    "Top performing role: Data Scientist (Avg Score: 91%).",
+    "Interview completion dropped by 8% this week.",
+    "JavaScript proficiency increased by 12% across all roles.",
+    "Average interview duration decreased to 24 minutes.",
+    "Mobile development candidates show 95% completion rate."
+  ],
+  performanceTrend: [
+    { period: 'Jan', interviews: 45, completed: 42, avgScore: 78, passRate: 75 },
+    { period: 'Feb', interviews: 52, completed: 48, avgScore: 81, passRate: 78 },
+    { period: 'Mar', interviews: 67, completed: 61, avgScore: 83, passRate: 80 },
+    { period: 'Apr', interviews: 73, completed: 69, avgScore: 85, passRate: 82 },
+    { period: 'May', interviews: 89, completed: 84, avgScore: 87, passRate: 84 },
+    { period: 'Jun', interviews: 93, completed: 87, avgScore: 89, passRate: 87 }
+  ],
+  roleBreakdown: [
+    { role: 'Frontend Developer', avgScore: 89, passRate: 85, candidates: 45 },
+    { role: 'Backend Developer', avgScore: 91, passRate: 88, candidates: 38 },
+    { role: 'Data Scientist', avgScore: 93, passRate: 91, candidates: 22 },
+    { role: 'UI/UX Designer', avgScore: 86, passRate: 83, candidates: 28 },
+    { role: 'DevOps Engineer', avgScore: 88, passRate: 86, candidates: 23 }
+  ],
+  interviewStages: [
+    { stage: 'Screening', completed: 234, passed: 189, passRate: 81 },
+    { stage: 'Technical', completed: 189, passed: 156, passRate: 83 },
+    { stage: 'Final Round', completed: 156, passed: 128, passRate: 82 }
+  ],
+  topCandidates: [
+    { name: 'Sarah Johnson', score: 95, role: 'Frontend Developer' },
+    { name: 'Michael Chen', score: 93, role: 'Data Scientist' },
+    { name: 'Emily Rodriguez', score: 91, role: 'Backend Developer' },
+    { name: 'David Kim', score: 89, role: 'UI/UX Designer' }
+  ],
+  currentTasks: [
+    { task: 'Pending interview reviews', count: 12, priority: 'high' },
+    { task: 'Templates needing updates', count: 3, priority: 'medium' },
+    { task: 'Interviews awaiting feedback', count: 8, priority: 'high' },
+    { task: 'Role descriptions to review', count: 5, priority: 'low' }
   ]
 };
 
 const Analysis = () => {
   const [selectedRole, setSelectedRole] = useState('All Roles');
   const [dateRange, setDateRange] = useState('This Month');
+  const [currentInsight, setCurrentInsight] = useState(0);
+
+  // Rotate insights every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentInsight((prev) => (prev + 1) % analysisData.insights.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <DashboardLayout>
       <div className="space-y-8">
-        {/* Dynamic Header */}
+        {/* Enhanced Header with Dynamic Insights */}
         <PageHeader
           title="Interview Analytics"
-          subtitle="Comprehensive performance insights and candidate analysis"
+          subtitle={analysisData.insights[currentInsight]}
           buttonText="Export Report"
           buttonIcon={<Download className="w-4 h-4" />}
           onButtonClick={() => console.log('Export report')}
         />
 
-        {/* Key Metrics */}
+        {/* Enhanced Key Metrics with Visual Improvements */}
         <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="text-center">
-              <div className="text-4xl font-bold text-blue-400 mb-2">{analysisData.totalInterviews}</div>
+              <div className="flex items-center justify-center mb-3">
+                <Users className="w-6 h-6 text-blue-400 mr-2" />
+                <div className="text-4xl font-bold text-blue-400">{analysisData.totalInterviews}</div>
+              </div>
               <div className="text-sm text-white/60">Total Interviews</div>
+              <div className="w-full bg-white/10 rounded-full h-2 mt-2">
+                <div className="w-3/4 h-2 bg-blue-400 rounded-full" />
+              </div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-green-400 mb-2">{analysisData.passRate}</div>
+              <div className="flex items-center justify-center mb-3">
+                <Target className="w-6 h-6 text-green-400 mr-2" />
+                <div className="text-4xl font-bold text-green-400">{analysisData.passRate}%</div>
+              </div>
               <div className="text-sm text-white/60">Pass Rate</div>
+              <div className="w-full bg-white/10 rounded-full h-2 mt-2">
+                <div 
+                  className="h-2 bg-green-400 rounded-full transition-all duration-500" 
+                  style={{ width: `${analysisData.passRate}%` }}
+                />
+              </div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-purple-400 mb-2">{analysisData.avgScore}</div>
+              <div className="flex items-center justify-center mb-3">
+                <Award className="w-6 h-6 text-purple-400 mr-2" />
+                <div className="text-4xl font-bold text-purple-400">{analysisData.avgScore}</div>
+              </div>
               <div className="text-sm text-white/60">Avg Score</div>
+              <div className="w-full bg-white/10 rounded-full h-2 mt-2">
+                <div 
+                  className="h-2 bg-purple-400 rounded-full transition-all duration-500" 
+                  style={{ width: `${analysisData.avgScore}%` }}
+                />
+              </div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold text-orange-400 mb-2">{analysisData.thisMonth}</div>
-              <div className="text-sm text-white/60">This Month</div>
+              <div className="flex items-center justify-center mb-3">
+                <Clock className="w-6 h-6 text-orange-400 mr-2" />
+                <div className="text-4xl font-bold text-orange-400">{analysisData.avgDuration}m</div>
+              </div>
+              <div className="text-sm text-white/60">Avg Duration</div>
+              <div className="w-full bg-white/10 rounded-full h-2 mt-2">
+                <div className="w-2/3 h-2 bg-orange-400 rounded-full" />
+              </div>
             </div>
           </div>
         </div>
@@ -76,9 +152,9 @@ const Analysis = () => {
               className="px-4 py-2 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-sm"
             >
               <option value="All Roles">All Roles</option>
-              <option value="Frontend Developer">Frontend Developer</option>
-              <option value="Backend Developer">Backend Developer</option>
-              <option value="UI/UX Designer">UI/UX Designer</option>
+              {analysisData.roleBreakdown.map(role => (
+                <option key={role.role} value={role.role}>{role.role}</option>
+              ))}
             </select>
             <div className="flex items-center gap-2 ml-auto">
               <Calendar className="w-4 h-4 text-white/40" />
@@ -96,7 +172,140 @@ const Analysis = () => {
           </div>
         </div>
 
-        {/* Charts and Analysis */}
+        {/* Performance Trend Graph */}
+        <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
+          <h3 className="text-lg font-semibold text-white mb-6">Performance Trends</h3>
+          <div className="h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={analysisData.performanceTrend}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
+                <XAxis 
+                  dataKey="period" 
+                  stroke="#ffffff60"
+                  fontSize={12}
+                />
+                <YAxis stroke="#ffffff60" fontSize={12} />
+                <Tooltip 
+                  contentStyle={{
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: '8px',
+                    color: 'white'
+                  }}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="interviews" 
+                  stroke="#3b82f6" 
+                  strokeWidth={2}
+                  name="Interviews Scheduled"
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="completed" 
+                  stroke="#10b981" 
+                  strokeWidth={2}
+                  name="Interviews Completed"
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="avgScore" 
+                  stroke="#8b5cf6" 
+                  strokeWidth={2}
+                  name="Average Score"
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Segmented Analysis */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* By Job Role */}
+          <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
+            <h3 className="text-lg font-semibold text-white mb-6">Analysis by Role</h3>
+            <div className="space-y-4">
+              {analysisData.roleBreakdown.map((role, index) => (
+                <div key={index} className="p-4 bg-white/5 rounded-xl border border-white/10">
+                  <div className="font-medium text-white mb-2">{role.role}</div>
+                  <div className="flex justify-between text-sm text-white/70 mb-1">
+                    <span>Avg Score: {role.avgScore}%</span>
+                    <span>Pass Rate: {role.passRate}%</span>
+                  </div>
+                  <div className="flex justify-between text-xs text-white/50">
+                    <span>{role.candidates} candidates</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* By Interview Stage */}
+          <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
+            <h3 className="text-lg font-semibold text-white mb-6">Analysis by Stage</h3>
+            <div className="space-y-4">
+              {analysisData.interviewStages.map((stage, index) => (
+                <div key={index} className="p-4 bg-white/5 rounded-xl border border-white/10">
+                  <div className="font-medium text-white mb-2">{stage.stage}</div>
+                  <div className="flex justify-between text-sm text-white/70 mb-2">
+                    <span>{stage.passed}/{stage.completed} passed</span>
+                    <span>{stage.passRate}% pass rate</span>
+                  </div>
+                  <div className="w-full bg-white/10 rounded-full h-2">
+                    <div 
+                      className="h-2 bg-green-400 rounded-full transition-all duration-500" 
+                      style={{ width: `${stage.passRate}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Top Candidates & Tasks */}
+          <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
+            <h3 className="text-lg font-semibold text-white mb-6">Activity Panel</h3>
+            
+            {/* Top Candidates */}
+            <div className="mb-6">
+              <h4 className="text-sm font-medium text-white/80 mb-3">Top Candidates</h4>
+              <div className="space-y-2">
+                {analysisData.topCandidates.map((candidate, index) => (
+                  <div key={index} className="flex items-center justify-between p-2 bg-white/5 rounded-lg">
+                    <div>
+                      <div className="text-sm font-medium text-white">{candidate.name}</div>
+                      <div className="text-xs text-white/60">{candidate.role}</div>
+                    </div>
+                    <div className="text-sm font-bold text-green-400">{candidate.score}%</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Current Tasks */}
+            <div>
+              <h4 className="text-sm font-medium text-white/80 mb-3">Tasks in Progress</h4>
+              <div className="space-y-2">
+                {analysisData.currentTasks.map((task, index) => (
+                  <div key={index} className="flex items-center justify-between p-2 bg-white/5 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <AlertCircle 
+                        className={`w-4 h-4 ${
+                          task.priority === 'high' ? 'text-red-400' : 
+                          task.priority === 'medium' ? 'text-yellow-400' : 'text-gray-400'
+                        }`} 
+                      />
+                      <div className="text-sm text-white">{task.task}</div>
+                    </div>
+                    <div className="text-sm font-medium text-white/70">{task.count}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Charts and Analysis - Updated */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Score Distribution */}
           <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
@@ -148,82 +357,6 @@ const Analysis = () => {
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-
-        {/* Recent Trends */}
-        <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-6">Recent Trends</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {analysisData.recentTrends.map((trend, index) => (
-              <div key={index} className="flex items-center gap-3 p-4 bg-white/5 rounded-xl border border-white/10">
-                <div className="text-2xl">{trend.icon}</div>
-                <div>
-                  <div className="font-medium text-white">{trend.text}</div>
-                  <div className={`text-sm ${trend.color}`}>{trend.change}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Detailed Analytics Table */}
-        <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl">
-          <div className="p-6 border-b border-white/10">
-            <h3 className="text-lg font-semibold text-white">Interview Performance Details</h3>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-white/5">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
-                    Candidate
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
-                    Role
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
-                    Score
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
-                    Duration
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
-                    Date
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-white/60 uppercase tracking-wider">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/10">
-                <tr className="hover:bg-white/5">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
-                    Sarah Johnson
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-white/70">
-                    Frontend Developer
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-500/20 text-green-300 border border-green-500/30">
-                      85%
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-white/70">
-                    42 min
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-white/70">
-                    Dec 15, 2024
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-500/20 text-green-300 border border-green-500/30">
-                      Passed
-                    </span>
-                  </td>
-                </tr>
-                {/* Add more rows as needed */}
-              </tbody>
-            </table>
           </div>
         </div>
       </div>
