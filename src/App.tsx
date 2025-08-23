@@ -17,7 +17,7 @@ import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import PostSignupDashboard from "./pages/PostSignupDashboard";
 import Dashboard from "./pages/Dashboard";
-import Templates from "./pages/Templates";
+import Jobs from "./pages/Templates";
 import Analysis from "./pages/Analysis";
 import Interviews from "./pages/Interviews";
 import { DemoOne } from "./components/demo";
@@ -39,7 +39,7 @@ const AppContent = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/post-signup" element={<PostSignupDashboard />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/templates" element={<Templates />} />
+          <Route path="/dashboard/templates" element={<Jobs />} />
           <Route path="/dashboard/analysis" element={<Analysis />} />
           <Route path="/dashboard/interviews" element={<Interviews />} />
           <Route path="/orb" element={<OrbShowcase />} />

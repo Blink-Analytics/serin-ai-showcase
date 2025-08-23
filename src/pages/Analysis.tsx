@@ -59,7 +59,7 @@ const analysisData = {
   ],
   currentTasks: [
     { task: 'Pending interview reviews', count: 12, priority: 'high' },
-    { task: 'Templates needing updates', count: 3, priority: 'medium' },
+    { task: 'Jobs needing updates', count: 3, priority: 'medium' },
     { task: 'Interviews awaiting feedback', count: 8, priority: 'high' },
     { task: 'Role descriptions to review', count: 5, priority: 'low' }
   ]
@@ -81,64 +81,86 @@ const Analysis = () => {
   return (
     <DashboardLayout>
       <div className="space-y-8">
-        {/* Enhanced Header with Dynamic Insights */}
-        <PageHeader
-          title="Interview Analytics"
-          subtitle={analysisData.insights[currentInsight]}
-          buttonText="Export Report"
-          buttonIcon={<Download className="w-4 h-4" />}
-          onButtonClick={() => console.log('Export report')}
-        />
+        {/* Analysis Tabs */}
+        <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-2">
+          <div className="flex space-x-1">
+            <button className="px-4 py-2 bg-white/10 text-white rounded-xl text-sm font-medium">
+              Overview
+            </button>
+            <button className="px-4 py-2 text-white/60 hover:text-white hover:bg-white/5 rounded-xl text-sm font-medium">
+              Detailed Scores
+            </button>
+            <button className="px-4 py-2 text-white/60 hover:text-white hover:bg-white/5 rounded-xl text-sm font-medium">
+              Conversation
+            </button>
+            <button className="px-4 py-2 text-white/60 hover:text-white hover:bg-white/5 rounded-xl text-sm font-medium">
+              Insights
+            </button>
+          </div>
+        </div>
 
-        {/* Enhanced Key Metrics with Visual Improvements */}
-        <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="text-center">
-              <div className="flex items-center justify-center mb-3">
-                <Users className="w-6 h-6 text-blue-400 mr-2" />
-                <div className="text-4xl font-bold text-blue-400">{analysisData.totalInterviews}</div>
-              </div>
-              <div className="text-sm text-white/60">Total Interviews</div>
-              <div className="w-full bg-white/10 rounded-full h-2 mt-2">
-                <div className="w-3/4 h-2 bg-blue-400 rounded-full" />
+        {/* Session Overview - Smaller Header */}
+        <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-4">
+          <div className="flex items-center gap-3 mb-4">
+            <TrendingUp className="w-5 h-5 text-blue-400" />
+            <h2 className="text-lg font-semibold text-white">Session Overview</h2>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+              <div className="text-sm text-white/60 mb-1">Job Position</div>
+              <div className="text-white font-medium">Frontend Developer</div>
+            </div>
+            <div>
+              <div className="text-sm text-white/60 mb-1">Status</div>
+              <div className="inline-flex px-2 py-1 bg-green-500/20 text-green-400 rounded-full text-sm">
+                Completed
               </div>
             </div>
-            <div className="text-center">
-              <div className="flex items-center justify-center mb-3">
-                <Target className="w-6 h-6 text-green-400 mr-2" />
-                <div className="text-4xl font-bold text-green-400">{analysisData.passRate}%</div>
-              </div>
-              <div className="text-sm text-white/60">Pass Rate</div>
-              <div className="w-full bg-white/10 rounded-full h-2 mt-2">
-                <div 
-                  className="h-2 bg-green-400 rounded-full transition-all duration-500" 
-                  style={{ width: `${analysisData.passRate}%` }}
-                />
-              </div>
+            <div>
+              <div className="text-sm text-white/60 mb-1">Start Time</div>
+              <div className="text-white font-medium">8/23/2025, 11:15:36 AM</div>
             </div>
+            <div>
+              <div className="text-sm text-white/60 mb-1">Duration</div>
+              <div className="text-white font-medium">24 minutes</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Score and Recommendation Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Overall Score */}
+          <div className="bg-gradient-to-br from-red-500/10 to-red-600/5 backdrop-blur-xl border border-red-500/20 rounded-2xl p-6">
             <div className="text-center">
-              <div className="flex items-center justify-center mb-3">
-                <Award className="w-6 h-6 text-purple-400 mr-2" />
-                <div className="text-4xl font-bold text-purple-400">{analysisData.avgScore}</div>
+              <div className="text-6xl font-bold text-red-400 mb-2">
+                {Math.floor(analysisData.avgScore / 10)}<span className="text-3xl text-white/40">/10</span>
               </div>
-              <div className="text-sm text-white/60">Avg Score</div>
-              <div className="w-full bg-white/10 rounded-full h-2 mt-2">
+              <div className="text-white/60 mb-4">Overall Score</div>
+              <div className="w-full bg-white/10 rounded-full h-2">
                 <div 
-                  className="h-2 bg-purple-400 rounded-full transition-all duration-500" 
+                  className="h-2 bg-red-400 rounded-full transition-all duration-500" 
                   style={{ width: `${analysisData.avgScore}%` }}
                 />
               </div>
             </div>
-            <div className="text-center">
-              <div className="flex items-center justify-center mb-3">
-                <Clock className="w-6 h-6 text-orange-400 mr-2" />
-                <div className="text-4xl font-bold text-orange-400">{analysisData.avgDuration}m</div>
-              </div>
-              <div className="text-sm text-white/60">Avg Duration</div>
-              <div className="w-full bg-white/10 rounded-full h-2 mt-2">
-                <div className="w-2/3 h-2 bg-orange-400 rounded-full" />
-              </div>
+          </div>
+
+          {/* Recommendation */}
+          <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-6 h-6 text-red-400">✕</div>
+              <h3 className="text-lg font-semibold text-white">Recommendation</h3>
             </div>
+            <div className="mb-3">
+              <div className="text-red-400 font-medium mb-2">No Hire</div>
+            </div>
+            <p className="text-white/80 text-sm leading-relaxed">
+              The candidate demonstrated poor communication skills and a lack of preparedness. 
+              Their responses were unclear and irrelevant, failing to address the interviewer's 
+              questions directly. Their technical competency could not be assessed due to their 
+              inability to articulate solutions effectively.
+            </p>
           </div>
         </div>
 

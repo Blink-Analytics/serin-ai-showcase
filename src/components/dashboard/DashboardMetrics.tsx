@@ -3,7 +3,7 @@ import { TrendingUp, TrendingDown, FileText, Users, Star, BarChart3 } from 'luci
 
 const metrics = [
   {
-    title: 'Active Templates',
+    title: 'Active Jobs',
     value: '4',
     change: '+2 from last month',
     trend: 'up',

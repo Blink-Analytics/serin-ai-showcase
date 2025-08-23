@@ -114,7 +114,7 @@ export function SetupComplete({ type, data, onContinue }: SetupCompleteProps) {
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-green-300 mt-1">•</span>
-                <span>Create your first interview template</span>
+                <span>Create your first interview job</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-green-300 mt-1">•</span>

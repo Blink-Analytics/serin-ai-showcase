@@ -29,7 +29,7 @@ import { OrganizationSelector } from "@/components/OrganizationSelector";
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: Home },
-  { name: 'Templates', href: '/dashboard/templates', icon: FileText },
+  { name: 'Jobs', href: '/dashboard/templates', icon: FileText },
   { name: 'Analysis', href: '/dashboard/analysis', icon: BarChart3 },
   { name: 'Interviews', href: '/dashboard/interviews', icon: Calendar },
 ];
@@ -42,10 +42,8 @@ export const HorizontalNavbar = () => {
     <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-5xl">
       <nav className="bg-black/90 backdrop-blur-xl border border-gray-700 rounded-full px-4 py-2 shadow-2xl">
         <div className="flex items-center justify-between w-full">
-          {/* Left: Organization Selector */}
-          <div className="flex items-center">
-            <OrganizationSelector />
-          </div>
+          {/* Left: Empty space for balance */}
+          <div className="flex-1"></div>
 
           {/* Center: Navigation Items */}
           <div className="flex items-center space-x-1">
@@ -76,18 +74,9 @@ export const HorizontalNavbar = () => {
           })}
           </div>
 
-          {/* Right: Search Bar */}
-          <div className="flex items-center space-x-3">
-            <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <Input
-                type="text"
-                placeholder="Search templates, interviews..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-64 pl-10 pr-4 py-2 bg-black/50 border-gray-600 text-white placeholder-gray-400 focus:border-gray-400 rounded-full text-sm"
-              />
-            </div>
+          {/* Right: Organization Selector */}
+          <div className="flex items-center justify-end flex-1">
+            <OrganizationSelector />
           </div>
         </div>
       </nav>
