@@ -42,7 +42,7 @@ export const HorizontalNavbar = () => {
     <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-7xl px-8 sm:px-12 lg:px-16">
       <div className="flex items-center justify-between w-full">
         {/* Main Navigation */}
-        <nav className="bg-black/90 backdrop-blur-xl border border-gray-700 rounded-full px-6 py-3 shadow-2xl">
+        <nav className="bg-black/90 backdrop-blur-xl border border-gray-700 rounded-full px-4 py-2 shadow-2xl">
           <div className="flex items-center space-x-1">
             {navigation.map((item) => {
               const isActive = location.pathname === item.href || 
@@ -53,7 +53,7 @@ export const HorizontalNavbar = () => {
                   key={item.name}
                   to={item.href}
                   className={cn(
-                    "relative flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
+                    "relative flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200",
                     isActive
                       ? "text-white bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-blue-500/30 backdrop-blur-md border border-white/30 shadow-inner shadow-blue-500/20"
                       : "text-gray-300 hover:text-white hover:bg-gray-800"
@@ -84,7 +84,7 @@ export const HorizontalNavbar = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="relative bg-black/90 backdrop-blur-xl border border-gray-700 text-gray-300 hover:text-white hover:bg-gray-800 rounded-full w-12 h-12 shadow-2xl"
+              className="relative bg-black/90 backdrop-blur-xl border border-gray-700 text-gray-300 hover:text-white hover:bg-gray-800 rounded-full w-10 h-10 shadow-2xl"
             >
               <Bell className="w-4 h-4" />
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
@@ -122,9 +122,9 @@ export const HorizontalNavbar = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="bg-black/90 backdrop-blur-xl border border-gray-700 hover:bg-gray-800 rounded-full w-12 h-12 shadow-2xl"
+              className="bg-black/90 backdrop-blur-xl border border-gray-700 hover:bg-gray-800 rounded-full w-10 h-10 shadow-2xl"
             >
-              <div className="w-6 h-6 bg-gray-600 rounded-full flex items-center justify-center">
+              <div className="w-5 h-5 bg-gray-600 rounded-full flex items-center justify-center">
                 <User className="w-3 h-3 text-white" />
               </div>
             </Button>
