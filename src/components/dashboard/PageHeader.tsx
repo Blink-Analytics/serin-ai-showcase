@@ -50,82 +50,44 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
       />
 
       {/* Header Content */}
-      <div className="relative z-10 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 lg:gap-16 p-8 lg:p-10">
+      <div className="relative z-10 flex flex-row items-center justify-between gap-6 p-4">
         {/* Left side - Text content */}
-        <motion.div 
-          className="flex-1 mt-16"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, duration: 0.5 }}
-        >
-          {/* Organization name and personalized greeting */}
-          <motion.div 
-            className="mb-4 flex items-center gap-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-          >
-            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-lg">{organizationName.charAt(0)}</span>
+        <div className="flex-1">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+              <span className="text-white font-bold text-sm">{organizationName.charAt(0)}</span>
             </div>
-            <div>
-              <span className="text-sm font-medium text-blue-400 bg-blue-400/10 px-3 py-1 rounded-full border border-blue-400/20">
-                {organizationName}
-              </span>
-            </div>
-          </motion.div>
+            <span className="text-xs font-medium text-blue-400 bg-blue-400/10 px-2 py-1 rounded-full border border-blue-400/20">
+              {organizationName}
+            </span>
+          </div>
 
-          {/* Personalized greeting */}
-          <motion.h1 
-            className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent mb-4 leading-tight"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-          >
+          <h1 className="text-xl font-bold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent mb-1">
             Welcome back, {userName}
-          </motion.h1>
+          </h1>
 
-          {/* Subtitle */}
-          <motion.p 
-            className="text-lg text-gray-400 max-w-2xl leading-relaxed mb-6"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.5 }}
-          >
+          <p className="text-sm text-gray-400 mb-3">
             {subtitle}
-          </motion.p>
+          </p>
 
-          {/* Key Insight */}
-          <motion.div 
-            className="bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/20 rounded-lg p-4 max-w-md"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
-          >
+          <div className="bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/20 rounded-lg p-2 max-w-sm">
             <div className="flex items-center gap-2 mb-1">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <span className="text-sm font-medium text-green-400">Key Insight</span>
+              <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
+              <span className="text-xs font-medium text-green-400">Key Insight</span>
             </div>
-            <p className="text-white font-semibold">{keyInsight}</p>
-          </motion.div>
-        </motion.div>
+            <p className="text-white text-sm font-semibold">{keyInsight}</p>
+          </div>
+        </div>
 
         {/* Right side - Action button */}
         {buttonText && (
-          <motion.div
-            className="flex items-start"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.5 }}
+          <Button
+            onClick={onButtonClick}
+            className="bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 backdrop-blur-sm shadow-lg hover:shadow-xl flex items-center gap-2"
           >
-            <Button
-              onClick={onButtonClick}
-              className="bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 px-8 py-3 rounded-full text-lg font-medium transition-all duration-300 backdrop-blur-sm shadow-xl hover:shadow-2xl flex items-center gap-3"
-            >
-              {buttonIcon}
-              <span>{buttonText}</span>
-            </Button>
-          </motion.div>
+            {buttonIcon}
+            <span>{buttonText}</span>
+          </Button>
         )}
       </div>
     </motion.div>
