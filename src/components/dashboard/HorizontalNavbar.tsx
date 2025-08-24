@@ -39,50 +39,45 @@ export const HorizontalNavbar = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   return (
-    <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-5xl">
-      <nav className="bg-black/90 backdrop-blur-xl border border-gray-700 rounded-full px-4 py-2 shadow-2xl">
-        <div className="flex items-center justify-between w-full">
-          {/* Left: Empty space for balance */}
-          <div className="flex-1"></div>
-
-          {/* Center: Navigation Items */}
+    <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-7xl px-8 sm:px-12 lg:px-16">
+      <div className="flex items-center justify-between w-full">
+        {/* Main Navigation */}
+        <nav className="bg-black/90 backdrop-blur-xl border border-gray-700 rounded-full px-6 py-3 shadow-2xl">
           <div className="flex items-center space-x-1">
-          {navigation.map((item) => {
-            const isActive = location.pathname === item.href || 
-              (item.href === '/dashboard' && location.pathname === '/dashboard');
-            
-            return (
-              <Link
-                key={item.name}
-                to={item.href}
-                className={cn(
-                  "relative flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
-                  isActive
-                    ? "text-white bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-blue-500/30 backdrop-blur-md border border-white/30 shadow-inner shadow-blue-500/20"
-                    : "text-gray-300 hover:text-white hover:bg-gray-800"
-                )}
-              >
-                <item.icon className="w-4 h-4" />
-                <span className="hidden sm:block">{item.name}</span>
-                
-                {/* Active indicator glow */}
-                {isActive && (
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-blue-500/10 rounded-full" />
-                )}
-              </Link>
-            );
-          })}
+            {navigation.map((item) => {
+              const isActive = location.pathname === item.href || 
+                (item.href === '/dashboard' && location.pathname === '/dashboard');
+              
+              return (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={cn(
+                    "relative flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200",
+                    isActive
+                      ? "text-white bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-blue-500/30 backdrop-blur-md border border-white/30 shadow-inner shadow-blue-500/20"
+                      : "text-gray-300 hover:text-white hover:bg-gray-800"
+                  )}
+                >
+                  <item.icon className="w-4 h-4" />
+                  <span className="hidden sm:block">{item.name}</span>
+                  
+                  {/* Active indicator glow */}
+                  {isActive && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-blue-500/10 rounded-full" />
+                  )}
+                </Link>
+              );
+            })}
           </div>
+        </nav>
 
-          {/* Right: Organization Selector */}
-          <div className="flex items-center justify-end flex-1">
-            <OrganizationSelector />
-          </div>
-        </div>
-      </nav>
-
-      {/* User Actions - positioned to the right */}
-      <div className="absolute top-0 right-0 transform translate-x-full ml-4 flex items-center gap-3">
+        {/* Right Side Actions */}
+        <div className="flex items-center gap-4">
+          <OrganizationSelector />
+          
+          {/* User Actions */}
+          <div className="flex items-center gap-3">
         {/* Notifications */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -156,6 +151,8 @@ export const HorizontalNavbar = () => {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+          </div>
+        </div>
       </div>
     </div>
   );
