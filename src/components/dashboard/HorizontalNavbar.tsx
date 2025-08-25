@@ -40,13 +40,14 @@ export const HorizontalNavbar = () => {
 
   return (
     <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-7xl px-8 sm:px-12 lg:px-16">
-      <div className="flex items-center justify-between w-full">
+      <div className="flex items-center justify-center w-full gap-8">
         {/* Main Navigation */}
         <nav className="bg-black/90 backdrop-blur-xl border border-gray-700 rounded-full px-4 py-2 shadow-2xl">
           <div className="flex items-center space-x-1">
             {navigation.map((item) => {
               const isActive = location.pathname === item.href || 
-                (item.href === '/dashboard' && location.pathname === '/dashboard');
+                (item.href === '/dashboard' && location.pathname === '/dashboard') ||
+                (item.href === '/dashboard/analysis' && location.pathname.startsWith('/dashboard/analysis'));
               
               return (
                 <Link
@@ -72,12 +73,11 @@ export const HorizontalNavbar = () => {
           </div>
         </nav>
 
+        {/* Organization Selector */}
+        <OrganizationSelector />
+
         {/* Right Side Actions */}
-        <div className="flex items-center gap-4">
-          <OrganizationSelector />
-          
-          {/* User Actions */}
-          <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3">
         {/* Notifications */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -151,7 +151,6 @@ export const HorizontalNavbar = () => {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-          </div>
         </div>
       </div>
     </div>
