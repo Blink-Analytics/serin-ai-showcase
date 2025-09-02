@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
-import { PageHeader } from '@/components/dashboard/PageHeader';
 import { Plus, Search, Filter, Edit, Play, Trash2, Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -12,7 +11,7 @@ const jobs = [
     duration: 45,
     interviewsCompleted: 23,
     tags: ['React', 'TypeScript', 'JavaScript'],
-    status: 'active',
+    status: 'Active',
     lastModified: '2 days ago'
   },
   {
@@ -22,7 +21,7 @@ const jobs = [
     duration: 60,
     interviewsCompleted: 15,
     tags: ['Node.js', 'SQL', 'Databases'],
-    status: 'active',
+    status: 'Active',
     lastModified: '1 week ago'
   },
   {
@@ -32,60 +31,48 @@ const jobs = [
     duration: 30,
     interviewsCompleted: 0,
     tags: ['UI', 'UX', 'Figma'],
-    status: 'draft',
+    status: 'Draft',
     lastModified: '3 days ago'
   }
 ];
 
 const Jobs = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('all');
 
   const filteredJobs = jobs.filter(job => {
     const matchesSearch = job.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          job.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = selectedStatus === 'all' || job.status === selectedStatus;
-    return matchesSearch && matchesStatus;
+    return matchesSearch;
   });
 
   return (
     <DashboardLayout>
       <div className="space-y-8">
-        {/* Dynamic Header */}
-        <PageHeader
-          title="Job Roles"
-          subtitle="Create and manage AI interview jobs"
-          buttonText="Create Job"
-          buttonIcon={<Plus className="w-4 h-4" />}
-          onButtonClick={() => console.log('Create new job')}
-        />
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-white">Jobs</h1>
+          <Button className="bg-white/10 hover:bg-white/20 text-white border border-white/20">
+            <Plus className="w-4 h-4 mr-2" />
+            New Job
+          </Button>
+        </div>
 
-        {/* Filters */}
-        <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/40" />
-              <input
-                type="text"
-                placeholder="Search jobs..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-sm"
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <Filter className="w-4 h-4 text-white/40" />
-              <select
-                value={selectedStatus}
-                onChange={(e) => setSelectedStatus(e.target.value)}
-                className="px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-sm"
-              >
-                <option value="all">All Status</option>
-                <option value="active">Active</option>
-                <option value="draft">Draft</option>
-              </select>
-            </div>
+        {/* Search and Filter */}
+        <div className="flex gap-4">
+          <div className="flex-1 relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-white/40" />
+            <input
+              type="text"
+              placeholder="Search jobs..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/40 focus:ring-2 focus:ring-blue-500 focus:border-transparent backdrop-blur-sm"
+            />
           </div>
+          <Button variant="outline" className="border-white/20 text-white/70 hover:text-white hover:bg-white/10 px-6">
+            <Filter className="w-4 h-4 mr-2" />
+            All
+          </Button>
         </div>
 
         {/* Jobs Grid */}
@@ -97,10 +84,10 @@ const Jobs = () => {
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <h3 className="font-semibold text-white text-lg">{job.name}</h3>
-                    <span className={`px-2 py-1 text-xs rounded-full ${
-                      job.status === 'active' 
-                        ? 'bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-300 border border-blue-500/30' 
-                        : 'bg-white/10 text-white/60 border border-white/20'
+                    <span className={`px-2 py-1 text-xs rounded ${
+                      job.status === 'Active' 
+                        ? 'bg-green-500/20 text-green-300 border border-green-500/30' 
+                        : 'bg-orange-500/20 text-orange-300 border border-orange-500/30'
                     }`}>
                       {job.status}
                     </span>
@@ -118,38 +105,27 @@ const Jobs = () => {
                 ))}
               </div>
 
-              {/* Stats */}
-              <div className="flex items-center justify-between text-sm text-white/50 mb-4">
-                <div className="flex items-center gap-4">
-                  <span>👥 {job.interviewsCompleted} interviews</span>
-                  <span>⏱️ {job.duration} min</span>
-                </div>
-              </div>
-
-              <div className="text-xs text-white/40 mb-4">
-                Last modified: {job.lastModified}
+              {/* Duration */}
+              <div className="text-sm text-white/50 mb-4">
+                ⏱️ {job.duration} min
               </div>
 
               {/* Actions */}
-              <div className="flex items-center gap-2">
-                <Button size="sm" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white flex-1 shadow-lg hover:shadow-xl transition-all duration-200">
-                  <Play className="w-3 h-3 mr-1" />
+              <div className="flex items-center gap-2 mb-3">
+                <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
                   Use Job
                 </Button>
-                <Button size="sm" variant="outline" className="p-2 border-white/20 text-white/70 hover:text-white hover:bg-white/10">
+                <Button size="sm" variant="outline" className="border-white/20 text-white/70 hover:text-white hover:bg-white/10">
                   <Edit className="w-3 h-3" />
                 </Button>
-                <Button size="sm" variant="outline" className="p-2 border-white/20 text-white/70 hover:text-white hover:bg-white/10">
+                <Button size="sm" variant="outline" className="border-white/20 text-white/70 hover:text-white hover:bg-white/10">
                   <Copy className="w-3 h-3" />
-                </Button>
-                <Button size="sm" variant="outline" className="p-2 border-white/20 text-red-400 hover:text-red-300 hover:bg-red-500/10">
-                  <Trash2 className="w-3 h-3" />
                 </Button>
               </div>
 
               {/* Test AI Interview Button */}
-              <Button variant="ghost" size="sm" className="w-full mt-2 text-white/50 hover:text-white/70 hover:bg-white/5">
-                🧪 Test AI Interview
+              <Button variant="ghost" size="sm" className="w-full text-white/50 hover:text-white/70 hover:bg-white/5">
+                Test AI Interview
               </Button>
             </div>
           ))}
