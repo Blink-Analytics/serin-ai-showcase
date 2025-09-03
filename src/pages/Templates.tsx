@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { Plus, Search, Filter, Edit, Play, Trash2, Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 const jobs = [
   {
@@ -38,6 +39,7 @@ const jobs = [
 
 const Jobs = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   const filteredJobs = jobs.filter(job => {
     const matchesSearch = job.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -112,7 +114,11 @@ const Jobs = () => {
 
               {/* Actions */}
               <div className="flex items-center gap-2 mb-3">
-                <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Button 
+                  size="sm" 
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                  onClick={() => navigate(`/dashboard/job/${job.id}`)}
+                >
                   Use Job
                 </Button>
                 <Button size="sm" variant="outline" className="border-white/20 text-white/70 hover:text-white hover:bg-white/10">

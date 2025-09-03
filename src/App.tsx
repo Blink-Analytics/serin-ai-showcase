@@ -20,6 +20,7 @@ import Dashboard from "./pages/Dashboard";
 import Jobs from "./pages/Templates";
 import AnalysisWithTabs from "./pages/AnalysisWithTabs";
 import Interviews from "./pages/Interviews";
+import JobDetails from "./pages/JobDetails";
 import { DemoOne } from "./components/demo";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ const AppContent = () => {
           <Route path="/post-signup" element={<PostSignupDashboard />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/templates" element={<Jobs />} />
+          <Route path="/dashboard/job/:id" element={<JobDetails />} />
           <Route path="/dashboard/analysis/*" element={<AnalysisWithTabs />} />
           <Route path="/dashboard/interviews" element={<Interviews />} />
           <Route path="/orb" element={<OrbShowcase />} />
