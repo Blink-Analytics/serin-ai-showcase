@@ -166,7 +166,194 @@ const JobDetails = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             <h1 className="text-3xl font-bold text-white mb-2">{job.name}</h1>
-            <p className="text-lg text-white/70">{job.description}</p>
+            <p className="text-lg text-white/70 mb-6">{job.description}</p>
+            
+            {/* Detailed Job Information Card */}
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 space-y-8">
+              {/* Company Info */}
+              <div>
+                <h2 className="text-xl font-semibold text-white mb-4">Job Details</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm text-white/60 block mb-1">Company</label>
+                    <p className="text-white font-medium">Blink Analytics</p>
+                  </div>
+                  <div>
+                    <label className="text-sm text-white/60 block mb-1">Location</label>
+                    <p className="text-white font-medium">Remote (Global)</p>
+                  </div>
+                  <div>
+                    <label className="text-sm text-white/60 block mb-1">Employment Type</label>
+                    <p className="text-white font-medium">Full-time, Permanent</p>
+                  </div>
+                  <div>
+                    <label className="text-sm text-white/60 block mb-1">Salary Range</label>
+                    <p className="text-white font-medium">$65,000 - $95,000 USD</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Job Summary */}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-3">Job Summary</h3>
+                <p className="text-white/80 text-sm leading-relaxed">
+                  Blink Analytics is looking for a skilled Frontend Developer with a strong focus on React and TypeScript. 
+                  You will be responsible for building scalable, performant, and user-friendly interfaces for our modern analytics platform. 
+                  This is a remote-first role with flexible working hours and a collaborative, growth-oriented culture.
+                </p>
+              </div>
+
+              {/* Key Objectives */}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-3">Key Objectives</h3>
+                <ul className="space-y-2">
+                  <li className="flex items-start gap-2">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <span className="text-white/80 text-sm">Deliver scalable front-end features using React and TypeScript within the first 90 days</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <span className="text-white/80 text-sm">Improve performance and responsiveness across the analytics dashboard over the first 6 months</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <span className="text-white/80 text-sm">Collaborate effectively with designers and backend engineers to complete 90%+ of sprint tasks on time</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Responsibilities */}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-3">Day-to-Day Responsibilities</h3>
+                <ul className="space-y-2">
+                  {[
+                    "Build reusable, responsive components in React + TypeScript",
+                    "Translate Figma designs into clean, maintainable code",
+                    "Write unit and integration tests using Jest or React Testing Library",
+                    "Participate in agile sprint planning and standups",
+                    "Collaborate with backend teams to integrate APIs",
+                    "Conduct peer code reviews and maintain quality standards"
+                  ].map((responsibility, index) => (
+                    <li key={index} className="flex items-start gap-2">
+                      <div className="w-1.5 h-1.5 bg-white/60 rounded-full mt-2.5 flex-shrink-0"></div>
+                      <span className="text-white/80 text-sm">{responsibility}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Technical Skills */}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-3">Technical Requirements</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm text-white/60 block mb-2">Technical Skills</label>
+                    <div className="space-y-2">
+                      {[
+                        { skill: "React", level: "Expert" },
+                        { skill: "TypeScript", level: "Expert" },
+                        { skill: "CSS / Styled Components", level: "Intermediate" },
+                        { skill: "Git and version control", level: "Intermediate" }
+                      ].map((item, index) => (
+                        <div key={index} className="flex justify-between items-center">
+                          <span className="text-white/80 text-sm">{item.skill}</span>
+                          <span className={`px-2 py-1 text-xs rounded-md ${
+                            item.level === 'Expert' 
+                              ? 'bg-green-500/20 text-green-300 border border-green-500/30'
+                              : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                          }`}>
+                            {item.level}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="text-sm text-white/60 block mb-2">Experience</label>
+                    <div className="space-y-2">
+                      <p className="text-white/80 text-sm">• Minimum 2 years production experience</p>
+                      <p className="text-white/80 text-sm">• Hands-on React and TypeScript</p>
+                      <p className="text-white/80 text-sm">• Bachelor's degree in CS or equivalent</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Benefits */}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-3">Benefits & Culture</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm text-white/60 block mb-2">Benefits</label>
+                    <ul className="space-y-1">
+                      {[
+                        "Flexible working hours",
+                        "Learning and development budget", 
+                        "Health and wellness stipend",
+                        "Paid time off",
+                        "Remote-first work culture"
+                      ].map((benefit, index) => (
+                        <li key={index} className="flex items-start gap-2">
+                          <div className="w-1 h-1 bg-white/60 rounded-full mt-3 flex-shrink-0"></div>
+                          <span className="text-white/80 text-sm">{benefit}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  
+                  <div>
+                    <label className="text-sm text-white/60 block mb-2">Growth Opportunities</label>
+                    <ul className="space-y-1">
+                      {[
+                        "Advance toward lead/staff roles",
+                        "Deepen front-end expertise",
+                        "Product-shaping decisions"
+                      ].map((growth, index) => (
+                        <li key={index} className="flex items-start gap-2">
+                          <div className="w-1 h-1 bg-white/60 rounded-full mt-3 flex-shrink-0"></div>
+                          <span className="text-white/80 text-sm">{growth}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Evaluation Criteria */}
+              <div>
+                <h3 className="text-lg font-semibold text-white mb-3">Evaluation Criteria</h3>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-white/80 text-sm">Job Description Match</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-24 h-2 bg-white/20 rounded-full overflow-hidden">
+                        <div className="h-full bg-blue-500 rounded-full" style={{ width: '40%' }}></div>
+                      </div>
+                      <span className="text-white font-medium text-sm">40%</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-white/80 text-sm">Resume Evaluation</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-24 h-2 bg-white/20 rounded-full overflow-hidden">
+                        <div className="h-full bg-blue-500 rounded-full" style={{ width: '30%' }}></div>
+                      </div>
+                      <span className="text-white font-medium text-sm">30%</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-white/80 text-sm">Behavioral Assessment</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-24 h-2 bg-white/20 rounded-full overflow-hidden">
+                        <div className="h-full bg-blue-500 rounded-full" style={{ width: '30%' }}></div>
+                      </div>
+                      <span className="text-white font-medium text-sm">30%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           
           {/* Job Info Panel */}
