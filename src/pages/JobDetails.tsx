@@ -163,9 +163,62 @@ const JobDetails = () => {
         </div>
 
         {/* Job Info */}
-        <div>
-          <h1 className="text-3xl font-bold text-white mb-2">{job.name}</h1>
-          <p className="text-lg text-white/70">{job.description}</p>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <h1 className="text-3xl font-bold text-white mb-2">{job.name}</h1>
+            <p className="text-lg text-white/70">{job.description}</p>
+          </div>
+          
+          {/* Job Info Panel */}
+          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-semibold text-white">Job Details</h3>
+              <Button variant="outline" size="sm" className="border-white/20 text-white/70 hover:text-white hover:bg-white/10">
+                Edit Job
+              </Button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm text-white/60 block mb-1">Position</label>
+                <p className="text-white font-medium">{job.name}</p>
+              </div>
+              
+              <div>
+                <label className="text-sm text-white/60 block mb-1">Description</label>
+                <p className="text-white/80 text-sm">{job.description}</p>
+              </div>
+              
+              <div>
+                <label className="text-sm text-white/60 block mb-1">Interview Duration</label>
+                <p className="text-white font-medium">45 minutes</p>
+              </div>
+              
+              <div>
+                <label className="text-sm text-white/60 block mb-1">Status</label>
+                <span className="px-3 py-1 text-sm rounded-md bg-green-500/20 text-green-300 border border-green-500/30">
+                  Active
+                </span>
+              </div>
+              
+              <div>
+                <label className="text-sm text-white/60 block mb-1">Created</label>
+                <p className="text-white/80 text-sm">January 10, 2024</p>
+              </div>
+              
+              <div>
+                <label className="text-sm text-white/60 block mb-1">Total Candidates</label>
+                <p className="text-white font-medium">{candidatesData.length}</p>
+              </div>
+            </div>
+            
+            <div className="mt-6 pt-6 border-t border-white/10">
+              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                <Calendar className="w-4 h-4 mr-2" />
+                Schedule New Interview
+              </Button>
+            </div>
+          </div>
         </div>
 
         {/* Search and Filter */}
